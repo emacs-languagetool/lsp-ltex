@@ -42,5 +42,96 @@ https://github.com/valentjn/ltex-ls"
   :group 'lsp-mode
   :link '(url-link :tag "Github" "https://github.com/emacs-languagetool/lsp-ltex"))
 
+(defcustom lsp-ltex-active-modes
+  '(text-mode latex-mode org-mode markdown-mode)
+  "List of major mode that work with LTEX Language Server."
+  :type 'list
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-java-path "java"
+  "Path of the java executable."
+  :group 'lsp-ltex
+  :type 'string)
+
+(defcustom lsp-ltex-version "10.0.0"
+  "Version of LTEX language server."
+  :type 'string
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-extension-name
+  (format "ltex-ls-%s.tar.gz" lsp-ltex-version)
+  "File name of the extension file from language server."
+  :type 'string
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-server-download-url
+  (format "https://github.com/valentjn/ltex-ls/releases/download/%s/%s"
+          lsp-ltex-version lsp-ltex-extension-name)
+  "Automatic download url for lsp-ltex."
+  :type 'string
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-server-store-path
+  (f-join lsp-server-install-dir "ltex-ls")
+  "The path to the file in which LTEX Language Server will be stored."
+  :type 'file
+  :group 'lsp-ltex)
+
+(defun lsp-ltex--execute (cmd &rest args)
+  "Return non-nil if CMD executed succesfully with ARGS."
+  (save-window-excursion
+    (let ((inhibit-message t) (message-log-max nil))
+      (= 0 (shell-command (concat cmd " "
+                                  (mapconcat #'shell-quote-argument args " ")))))))
+
+(defun lsp-ltex--downloaded-extension-path ()
+  "Return full path of the downloaded extension.
+
+This is use to unzip the language server files."
+  (f-join lsp-ltex-server-store-path lsp-ltex-extension-name))
+
+(defun lsp-ltex--extension-root ()
+  "Return the root of the extension path.
+
+This is use to active language server and check if language server's existence."
+  (f-join lsp-ltex-server-store-path (format "ltex-ls-%s" lsp-ltex-version)))
+
+(defun lsp-ltex--server-entry ()
+  "Return the server entry file.
+
+This file is use to activate the language server."
+  (f-join (lsp-ltex--extension-root) "bin" (if (eq system-type 'windows-nt)
+                                               "ltex-ls.bat"
+                                             "ltex-ls")))
+
+(defun lsp-ltex--server-command ()
+  "Startup command for LTEX language server."
+  (list (lsp-ltex--server-entry)))
+
+(lsp-dependency
+ 'ltex-ls
+ '(:system "ltex-ls")
+ `(:download :url lsp-ltex-server-download-url
+             :store-path ,(lsp-ltex--downloaded-extension-path)))
+
+(lsp-register-client
+ (make-lsp-client
+  :new-connection (lsp-stdio-connection
+                   #'lsp-ltex--server-command
+                   (lambda () (f-exists? (lsp-ltex--extension-root))))
+  :activation-fn (lambda (&rest _) (apply #'derived-mode-p lsp-ltex-active-modes))
+  :priority 7
+  :server-id 'ltex-ls
+  :download-server-fn
+  (lambda (_client _callback error-callback _update?)
+    (lsp-package-ensure
+     'ltex-ls
+     (lambda ()
+       (let ((dest (f-dirname (lsp-ltex--downloaded-extension-path))))
+         ;; TODO: Error handling when unzip failed
+         (lsp-ltex--execute "tar" "-xvzf" (lsp-ltex--downloaded-extension-path)
+                            "-C" dest)))
+     error-callback))))
+
 (provide 'lsp-ltex)
 ;;; lsp-ltex.el ends here
