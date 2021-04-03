@@ -5,6 +5,13 @@
 
 `lsp-mode` client leveraging [LTEX Language Server](https://github.com/valentjn/ltex-ls).
 
+## :wrench: Configuration
+
+`lsp-ltex` supports following configuration. Each configuration is described in
+detail in [LTEX Settings](https://valentjn.github.io/vscode-ltex/docs/settings.html).
+
+* `ltex.language` via `lsp-ltex-language`
+
 ## Contribution
 
 If you would like to contribute to this project, you may either
