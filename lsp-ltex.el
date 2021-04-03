@@ -72,6 +72,11 @@ https://github.com/valentjn/ltex-ls"
   :type 'file
   :group 'lsp-ltex)
 
+(defcustom lsp-ltex-language "en-US"
+  "The language LanguageTool should check against"
+  :type 'string
+  :group 'lsp-ltex)
+
 (defun lsp-ltex--execute (cmd &rest args)
   "Return non-nil if CMD executed succesfully with ARGS."
   (save-window-excursion
@@ -102,6 +107,10 @@ This file is use to activate the language server."
 (defun lsp-ltex--server-command ()
   "Startup command for LTEX language server."
   (list (lsp-ltex--server-entry)))
+
+(lsp-register-custom-settings
+ '(("ltex.language" lsp-ltex-language)
+   ))
 
 (lsp-dependency
  'ltex-ls
