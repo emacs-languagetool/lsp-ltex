@@ -48,11 +48,6 @@ https://github.com/valentjn/ltex-ls"
   :type 'list
   :group 'lsp-ltex)
 
-(defcustom lsp-ltex-java-path "java"
-  "Path of the java executable."
-  :group 'lsp-ltex
-  :type 'string)
-
 (defcustom lsp-ltex-version "10.0.0"
   "Version of LTEX language server."
   :type 'string
