@@ -302,7 +302,7 @@ This file is use to activate the language server."
                    #'lsp-ltex--server-command
                    (lambda () (f-exists? (lsp-ltex--extension-root))))
   :activation-fn (lambda (&rest _) (apply #'derived-mode-p lsp-ltex-active-modes))
-  :priority 7
+  :priority -2
   :server-id 'ltex-ls
   :download-server-fn
   (lambda (_client _callback error-callback _update?)
