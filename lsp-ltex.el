@@ -48,7 +48,7 @@ https://github.com/valentjn/ltex-ls"
   :type 'list
   :group 'lsp-ltex)
 
-(defcustom lsp-ltex-version "10.0.0"
+(defcustom lsp-ltex-version "11.0.0-alpha.2"
   "Version of LTEX language server."
   :type 'string
   :group 'lsp-ltex)
@@ -72,10 +72,10 @@ https://github.com/valentjn/ltex-ls"
   :type 'file
   :group 'lsp-ltex)
 
-(defcustom lsp-ltex-enabled
-  '("bibtex" "latex" "markdown" "rsweave")
+(defcustom lsp-ltex-enabled nil
   "Controls whether the extension is enabled."
-  :type 'list
+  :type '(choice (const :tag "None" nil)
+                 list)
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-language "en-US"
