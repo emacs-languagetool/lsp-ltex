@@ -5,6 +5,8 @@
 
 `lsp-mode` client leveraging [LTEX Language Server](https://github.com/valentjn/ltex-ls).
 
+<p align="center"><img src="./etc/screenshot.png"/></p>
+
 ## :floppy_disk: Quickstart
 
 ```el
