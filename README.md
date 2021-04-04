@@ -5,6 +5,16 @@
 
 `lsp-mode` client leveraging [LTEX Language Server](https://github.com/valentjn/ltex-ls).
 
+## :floppy_disk: Quickstart
+
+```el
+(use-package lsp-ltex
+  :ensure t
+  :hook (text-mode . (lambda ()
+                       (require 'lsp-ltex)
+                       (lsp))))  ; or lsp-deferred
+```
+
 ## :wrench: Configuration
 
 `lsp-ltex` supports following configuration. Each configuration is described in
