@@ -72,9 +72,163 @@ https://github.com/valentjn/ltex-ls"
   :type 'file
   :group 'lsp-ltex)
 
+(defcustom lsp-ltex-enabled
+  '("bibtex" "latex" "markdown" "rsweave")
+  "Controls whether the extension is enabled."
+  :type 'list
+  :group 'lsp-ltex)
+
 (defcustom lsp-ltex-language "en-US"
-  "The language LanguageTool should check against"
+  "The language LanguageTool should check against."
   :type 'string
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-dictionary '()
+  "Lists of additional words that should not be counted as spelling errors."
+  :type 'list
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-disabled-rules '()
+  "Lists of rules that should be disabled (if enabled by default by \
+LanguageTool)."
+  :type 'list
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-enabled-rules '()
+  "Lists of rules that should be enabled (if disabled by default by \
+LanguageTool)."
+  :type 'list
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-hidden-false-positives '()
+  "Lists of false-positive diagnostics to hide."
+  :type 'list
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-bibtex-fields '()
+  "List of BibTEX fields whose values are to be checked in BibTEX files."
+  :type 'list
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-latex-commands '()
+  "List of LATEX commands to be handled by the LATEX parser, listed \
+together with empty arguments."
+  :type 'list
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-latex-environments '()
+  "List of names of LATEX environments to be handled by the LATEX parser."
+  :type 'list
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-markdown-nodes '()
+  "List of Markdown node types to be handled by the Markdown parser."
+  :type 'list
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-additional-rules-enable-picky-rules nil
+  "Enable LanguageTool rules that are marked as picky and that are disabled \
+by default, e.g., rules about passive voice, sentence length, etc."
+  :type 'boolean
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-mother-tongue ""
+  "Optional mother tongue of the user (e.g., \"de-DE\")."
+  :type 'string
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-additional-rules-language-model ""
+  "Optional path to a directory with rules of a language model with \
+n-gram occurrence counts."
+  :type 'string
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-additional-rules-neural-network-model ""
+  "Optional path to a directory with rules of a pretrained neural network model."
+  :type 'string
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-additional-rules-word-2-vec-model ""
+  "Optional path to a directory with rules of a word2vec language model."
+  :type 'string
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-languagetool-http-server-uri ""
+  "If set to a non-empty string, LTEX will not use the bundled, \
+built-in version of LanguageTool.  Instead, LTEX will connect to an \
+external LanguageTool HTTP server."
+  :type 'string
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-log-level "fine"
+  "Logging level (verbosity) of the ltex-ls server log."
+  :type '(choice (const "severe")
+                 (const "warning")
+                 (const "info")
+                 (const "config")
+                 (const "fine")
+                 (const "finer")
+                 (const "finest"))
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-java-path ""
+  "If set to an empty string and LTEX could not find Java on your computer, \
+LTEX automatically downloads a Java distribution (AdoptOpenJDK), stores it \
+in the folder of the extension, and uses it to run ltex-ls.  You can point \
+this setting to an existing Java installation on your computer to use that \
+installation instead."
+  :type 'string
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-java-force-try-system-wide nil
+  "If non-nil, always try to use a system-wide Java installation before \
+trying to use an automatically downloaded Java distribution."
+  :type 'boolean
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-java-initial-heap-size 64
+  "Initial size of the Java heap memory in megabytes.
+Corresponds to Java's -Xmx option, this must be a positive integer"
+  :type 'integer
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-java-maximum-heap-size 512
+  "Maximum size of the Java heap memory in megabytes.
+Corresponds to Java's -Xmx option, this must be a positive integer"
+  :type 'integer
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-sentence-cache-size 2000
+  "Size of the LanguageTool `ResultCache` in sentences.
+This must be a positive integer."
+  :type 'integer
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-diagnostic-severity "information"
+  "Severity of the diagnostics corresponding to the grammar and spelling errors."
+  :type '(choice (const "error")
+                 (const "warning")
+                 (const "information")
+                 (const "hint"))
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-check-frequency "edit"
+  "Controls when documents should be checked."
+  :type '(choice (const "edit")
+                 (const "save")
+                 (const "manual"))
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-clear-diagnostics-when-closing-file t
+  "If non-nil, diagnostics of a file are cleared when the file is closed."
+  :type 'boolean
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-trace-server "off"
+  "Debug setting to log the communication between language client and server."
+  :type '(choice (const "off")
+                 (const "messages")
+                 (const "verbose"))
   :group 'lsp-ltex)
 
 (defun lsp-ltex--execute (cmd &rest args)
@@ -109,8 +263,32 @@ This file is use to activate the language server."
   (list (lsp-ltex--server-entry)))
 
 (lsp-register-custom-settings
- '(("ltex.language" lsp-ltex-language)
-   ))
+ '(("ltex.enabled" lsp-ltex-enabled)
+   ("ltex.language" lsp-ltex-language)
+   ("ltex.dictionary" lsp-ltex-dictionary)
+   ("ltex.disabledRules" lsp-ltex-disabled-rules)
+   ("ltex.enabledRules" lsp-ltex-enabled-rules)
+   ("ltex.hiddenFalsePositives" lsp-ltex-hidden-false-positives)
+   ("ltex.bibtex.fields" lsp-ltex-bibtex-fields)
+   ("ltex.latex.commands" lsp-ltex-latex-commands)
+   ("ltex.latex.environments" lsp-ltex-latex-environments)
+   ("ltex.markdown-nodes" lsp-ltex-markdown-nodes)
+   ("ltex.additionalRules.enablePickyRules" lsp-ltex-additional-rules-enable-picky-rules)
+   ("ltex.additionalRules.motherTongue" lsp-ltex-mother-tongue)
+   ("ltex.additionalRules.languageModel" lsp-ltex-additional-rules-language-model)
+   ("ltex.additionalRules.neuralNetworkModel" lsp-ltex-additional-rules-neural-network-model)
+   ("ltex.additionalRules.word2VecModel" lsp-ltex-additional-rules-word-2-vec-model)
+   ("ltex.ltex-ls.languageToolHttpServerUri" lsp-ltex-languagetool-http-server-uri)
+   ("ltex.ltex-ls.logLevel" lsp-ltex-log-level)
+   ("ltex.java.path" lsp-ltex-java-path)
+   ("ltex.java.forceTrySystemWide" lsp-ltex-java-force-try-system-wide)
+   ("ltex.java.initialHeapSize" lsp-ltex-java-initial-heap-size)
+   ("ltex.java.maximumHeapSize" lsp-ltex-java-maximum-heap-size)
+   ("ltex.sentenceCacheSize" lsp-ltex-sentence-cache-size)
+   ("ltex.diagnosticSeverity" lsp-ltex-diagnostic-severity)
+   ("ltex.checkFrequency" lsp-ltex-check-frequency)
+   ("ltex.clearDiagnosticsWhenClosingFile" lsp-ltex-clear-diagnostics-when-closing-file)
+   ("ltex.trace.server" lsp-ltex-trace-server)))
 
 (lsp-dependency
  'ltex-ls
