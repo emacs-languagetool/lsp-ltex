@@ -310,9 +310,9 @@ This file is use to activate the language server."
      'ltex-ls
      (lambda ()
        (let ((dest (f-dirname (lsp-ltex--downloaded-extension-path))))
-         ;; TODO: Error handling when unzip failed
-         (lsp-ltex--execute "tar" "-xvzf" (lsp-ltex--downloaded-extension-path)
-                            "-C" dest)))
+         (unless (lsp-ltex--execute "tar" "-xvzf" (lsp-ltex--downloaded-extension-path)
+                                    "-C" dest)
+           (error "Error during the unzip process: tar"))))
      error-callback))))
 
 (provide 'lsp-ltex)
