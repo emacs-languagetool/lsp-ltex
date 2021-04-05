@@ -48,7 +48,7 @@ https://github.com/valentjn/ltex-ls"
   :type 'list
   :group 'lsp-ltex)
 
-(defcustom lsp-ltex-version "11.0.0-alpha.2"
+(defcustom lsp-ltex-version "11.0.0"
   "Version of LTEX language server."
   :type 'string
   :group 'lsp-ltex)
