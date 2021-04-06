@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.com/emacs-languagetool/lsp-ltex.svg?branch=master)](https://travis-ci.com/emacs-languagetool/lsp-ltex)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+<img align="right" src="./etc/logo.png" with="115" height="55">
+
 # lsp-ltex
 
 `lsp-mode` client leveraging [LTEX Language Server](https://github.com/valentjn/ltex-ls).
