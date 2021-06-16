@@ -303,6 +303,7 @@ This file is use to activate the language server."
                    (lambda () (f-exists? (lsp-ltex--extension-root))))
   :activation-fn (lambda (&rest _) (apply #'derived-mode-p lsp-ltex-active-modes))
   :priority -2
+  :add-on? t
   :server-id 'ltex-ls
   :download-server-fn
   (lambda (_client _callback error-callback _update?)
