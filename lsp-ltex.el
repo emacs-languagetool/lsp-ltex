@@ -128,7 +128,7 @@ with empty arguments."
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-additional-rules-enable-picky-rules nil
-  "Enable LanguageTool rules that are marked as picky and that are disabled \
+  "Enable LanguageTool rules that are marked as picky and that are disabled
 by default, e.g., rules about passive voice, sentence length, etc."
   :type 'boolean
   :group 'lsp-ltex)
