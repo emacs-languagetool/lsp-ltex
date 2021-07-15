@@ -7,7 +7,7 @@
 ;; Description: LSP Clients for LTEX.
 ;; Keyword: lsp languagetool checker
 ;; Version: 0.1.0
-;; Package-Requires: ((emacs "26.1") (lsp-mode "6.1"))
+;; Package-Requires: ((emacs "26.1") (lsp-mode "6.1") (f "0.20.0"))
 ;; URL: https://github.com/emacs-languagetool/lsp-ltex
 
 ;; This file is NOT part of GNU Emacs.
@@ -33,6 +33,7 @@
 ;;; Code:
 
 (require 'lsp-mode)
+(require 'f)
 
 (defgroup lsp-ltex nil
   "Settings for the LTEX Language Server.
