@@ -90,13 +90,13 @@ https://github.com/valentjn/ltex-ls"
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-disabled-rules '()
-  "Lists of rules that should be disabled (if enabled by default by \
+  "Lists of rules that should be disabled (if enabled by default by
 LanguageTool)."
   :type 'list
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-enabled-rules '()
-  "Lists of rules that should be enabled (if disabled by default by \
+  "Lists of rules that should be enabled (if disabled by default by
 LanguageTool)."
   :type 'list
   :group 'lsp-ltex)
@@ -139,7 +139,7 @@ by default, e.g., rules about passive voice, sentence length, etc."
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-additional-rules-language-model ""
-  "Optional path to a directory with rules of a language model with \
+  "Optional path to a directory with rules of a language model with
 n-gram occurrence counts."
   :type 'string
   :group 'lsp-ltex)
@@ -155,8 +155,8 @@ n-gram occurrence counts."
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-languagetool-http-server-uri ""
-  "If set to a non-empty string, LTEX will not use the bundled, \
-built-in version of LanguageTool.  Instead, LTEX will connect to an \
+  "If set to a non-empty string, LTEX will not use the bundled,
+built-in version of LanguageTool.  Instead, LTEX will connect to an
 external LanguageTool HTTP server."
   :type 'string
   :group 'lsp-ltex)
@@ -173,16 +173,16 @@ external LanguageTool HTTP server."
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-java-path ""
-  "If set to an empty string and LTEX could not find Java on your computer, \
-LTEX automatically downloads a Java distribution (AdoptOpenJDK), stores it \
-in the folder of the extension, and uses it to run ltex-ls.  You can point \
-this setting to an existing Java installation on your computer to use that \
+  "If set to an empty string and LTEX could not find Java on your computer,
+LTEX automatically downloads a Java distribution (AdoptOpenJDK), stores it
+in the folder of the extension, and uses it to run ltex-ls.  You can point
+this setting to an existing Java installation on your computer to use that
 installation instead."
   :type 'string
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-java-force-try-system-wide nil
-  "If non-nil, always try to use a system-wide Java installation before \
+  "If non-nil, always try to use a system-wide Java installation before
 trying to use an automatically downloaded Java distribution."
   :type 'boolean
   :group 'lsp-ltex)
