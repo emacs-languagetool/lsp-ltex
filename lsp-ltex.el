@@ -112,8 +112,8 @@ LanguageTool)."
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-latex-commands '()
-  "List of LATEX commands to be handled by the LATEX parser, listed \
-together with empty arguments."
+  "List of LATEX commands to be handled by the LATEX parser, listed together
+with empty arguments."
   :type 'list
   :group 'lsp-ltex)
 
