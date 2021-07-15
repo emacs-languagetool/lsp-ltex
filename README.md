@@ -1,7 +1,7 @@
-[![Build Status](https://travis-ci.com/emacs-languagetool/lsp-ltex.svg?branch=master)](https://travis-ci.com/emacs-languagetool/lsp-ltex)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![MELPA](https://melpa.org/packages/lsp-ltex-badge.svg)](https://melpa.org/#/lsp-ltex)
 [![MELPA Stable](https://stable.melpa.org/packages/lsp-ltex-badge.svg)](https://stable.melpa.org/#/lsp-ltex)
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![CI](https://github.com/emacs-languagetool/lsp-ltex/actions/workflows/test.yml/badge.svg)](https://github.com/emacs-languagetool/lsp-ltex/actions/workflows/test.yml)
 
 <img align="right" src="./etc/logo.png" with="115" height="55">
 
