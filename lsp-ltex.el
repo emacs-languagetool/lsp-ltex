@@ -252,7 +252,7 @@ This is use to unzip the language server files."
   "Return the root of the extension path.
 
 This is use to active language server and check if language server's existence."
-  (f-join lsp-ltex-server-store-path (format "ltex-ls-%s" lsp-ltex-version)))
+  (f-join lsp-ltex-server-store-path "latest"))
 
 (defun lsp-ltex--server-entry ()
   "Return the server entry file.
