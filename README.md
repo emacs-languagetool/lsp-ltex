@@ -11,6 +11,9 @@
 
 <p align="center"><img src="./etc/screenshot.png"/></p>
 
+*LanguageTool is built with Java, make sure you have environment variable
+`JAVA_HOME` set up*
+
 ## :floppy_disk: Quickstart
 
 ```el
