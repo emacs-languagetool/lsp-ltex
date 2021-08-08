@@ -59,12 +59,13 @@ https://github.com/valentjn/ltex-ls"
 (defcustom lsp-ltex-version "12.3.0"
   "Version of LTEX language server."
   :type 'string
-  :set (lambda (_symbol _value)
-         (setq lsp-ltex--filename (format "ltex-ls-%s" lsp-ltex-version)
+  :set (lambda (symbol value)
+         (set-default symbol value)
+         (setq lsp-ltex--filename (format "ltex-ls-%s" value)
                lsp-ltex--extension-name (format "%s.tar.gz" lsp-ltex--filename)
                lsp-ltex--server-download-url
                (format "https://github.com/%s/releases/download/%s/%s"
-                       lsp-ltex-repo-path lsp-ltex-version lsp-ltex--extension-name)))
+                       lsp-ltex-repo-path value lsp-ltex--extension-name)))
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-server-store-path
