@@ -56,6 +56,12 @@ https://github.com/valentjn/ltex-ls"
 (defvar lsp-ltex--extension-name nil "File name of the extension file from language server.")
 (defvar lsp-ltex--server-download-url nil "Automatic download url for lsp-ltex.")
 
+(defcustom lsp-ltex-version "12.3.0"
+  "Version of LTEX language server."
+  :type 'string
+  :set #'lsp-ltex--update-version
+  :group 'lsp-ltex)
+
 (defun lsp-ltex--update-version (_symbol _value)
   "Update all variables related with version number."
   (setq lsp-ltex--filename (format "ltex-ls-%s" lsp-ltex-version)
@@ -63,12 +69,6 @@ https://github.com/valentjn/ltex-ls"
         lsp-ltex--server-download-url
         (format "https://github.com/%s/releases/download/%s/%s"
                 lsp-ltex-repo-path lsp-ltex-version lsp-ltex--extension-name)))
-
-(defcustom lsp-ltex-version "12.3.0"
-  "Version of LTEX language server."
-  :type 'string
-  :set #'lsp-ltex--update-version
-  :group 'lsp-ltex)
 
 (defcustom lsp-ltex-server-store-path
   (f-join lsp-server-install-dir "ltex-ls")
