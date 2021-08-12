@@ -24,6 +24,12 @@
                        (lsp))))  ; or lsp-deferred
 ```
 
+## :card_index: Commands
+
+| Commands            | Description                                           |
+|:--------------------|:------------------------------------------------------|
+| lsp-ltex-upgrade-ls | Upgrade LTEX server, if not found install it instead. |
+
 ## :wrench: Configuration
 
 `lsp-ltex` supports following configuration. Each configuration is described in
