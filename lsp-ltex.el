@@ -32,6 +32,7 @@
 
 ;;; Code:
 
+(require 'subr-x)
 (require 'lsp-mode)
 (require 'f)
 (require 's)
@@ -58,7 +59,8 @@ https://github.com/valentjn/ltex-ls"
 (defvar lsp-ltex--extension-name nil "File name of the extension file from language server.")
 (defvar lsp-ltex--server-download-url nil "Automatic download url for lsp-ltex.")
 
-(defcustom lsp-ltex-version ""
+(defcustom lsp-ltex-version (or (lsp-ltex--current-version)
+                                (lsp-ltex--latest-version))
   "Version of LTEX language server."
   :type 'string
   :set (lambda (symbol value)
@@ -246,7 +248,7 @@ This must be a positive integer."
       (= 0 (shell-command (concat cmd " "
                                   (mapconcat #'shell-quote-argument args " ")))))))
 ;;
-;; (@* "Language Server" )
+;; (@* "Installation and Upgrade" )
 ;;
 
 (defun lsp-ltex--downloaded-extension-path ()
@@ -263,10 +265,40 @@ This is use to active language server and check if language server's existence."
 
 (defun lsp-ltex--current-version ()
   "Return the current version of LTEX."
-  (when-let* ((gz-files (f--files lsp-ltex-server-store-path (equal (f-ext it) "gz")))
+  (when-let* ((gz-files (ignore-errors
+                          (f--files lsp-ltex-server-store-path (equal (f-ext it) "gz"))))
               (tar (nth 0 gz-files))
               (fn (f-filename (s-replace ".tar.gz" "" tar))))
     (s-replace "ltex-ls-" "" fn)))
+
+(defun lsp-ltex--latest-version ()
+  "Return the latest version from remote repository."
+  (github-tags lsp-ltex-repo-path)
+  (let ((index 0) version ver)
+    ;; Loop through tag name and fine the stable version
+    (while (and (not version) (< index (length github-tags-names)))
+      (setq ver (nth index github-tags-names)
+            index (1+ index))
+      (when (string-match-p "^[0-9.]+$" ver)  ; stable version are only with numbers and dot
+        (setq version ver)))
+    version))
+
+(defun lsp-ltex-upgrade-ls ()
+  "Upgrade LTEXT to latest stable version.
+
+If current server not found, install it then."
+  (interactive)
+  (let* ((latest (lsp-ltex--latest-version))
+         (current (lsp-ltex--current-version)))
+    (if (and current (version<= latest current))
+        (message "[INFO] Current LTEX server is up to date: %s" current)
+      (when current
+        ;; First delete all binary files
+        (delete-directory lsp-ltex-server-store-path t))
+      (setq-default lsp-ltex-version latest)
+      (lsp-install-server t 'ltex-ls)  ; this is async
+      (message "[INFO] %s LTEX server version: %s"
+               (if current "Upgrading" "Installing") lsp-ltex-version))))
 
 ;;
 ;; (@* "Activation" )
