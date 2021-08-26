@@ -288,14 +288,14 @@ This is use to active language server and check if language server's existence."
 
 If current server not found, install it then."
   (interactive)
-  (let* ((latest (lsp-ltex--latest-version))
-         (current (lsp-ltex--current-version)))
+  (let ((latest (lsp-ltex--latest-version))
+        (current (lsp-ltex--current-version)))
     (if (and current (version<= latest current))
         (message "[INFO] Current LTEX server is up to date: %s" current)
       (when current
         ;; First delete all binary files
         (delete-directory lsp-ltex-server-store-path t))
-      (setq-default lsp-ltex-version latest)
+      (custom-set-variables `(lsp-ltex-version ,latest))
       (lsp-install-server t 'ltex-ls)  ; this is async
       (message "[INFO] %s LTEX server version: %s"
                (if current "Upgrading" "Installing") lsp-ltex-version))))
