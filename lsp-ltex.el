@@ -6,8 +6,8 @@
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; Description: LSP Clients for LTEX.
 ;; Keyword: lsp languagetool checker
-;; Version: 0.1.0
-;; Package-Requires: ((emacs "26.1") (lsp-mode "6.1") (f "0.20.0"))
+;; Version: 0.2.0
+;; Package-Requires: ((emacs "26.1") (lsp-mode "6.1") (f "0.20.0") (s "1.12.0"))
 ;; URL: https://github.com/emacs-languagetool/lsp-ltex
 
 ;; This file is NOT part of GNU Emacs.
@@ -32,8 +32,11 @@
 
 ;;; Code:
 
+(require 'subr-x)
 (require 'lsp-mode)
 (require 'f)
+(require 's)
+(require 'github-tags)
 
 (defgroup lsp-ltex nil
   "Settings for the LTEX Language Server.
@@ -56,7 +59,8 @@ https://github.com/valentjn/ltex-ls"
 (defvar lsp-ltex--extension-name nil "File name of the extension file from language server.")
 (defvar lsp-ltex--server-download-url nil "Automatic download url for lsp-ltex.")
 
-(defcustom lsp-ltex-version "12.3.0"
+(defcustom lsp-ltex-version (or (lsp-ltex--current-version)
+                                (lsp-ltex--latest-version))
   "Version of LTEX language server."
   :type 'string
   :set (lambda (symbol value)
@@ -233,12 +237,19 @@ This must be a positive integer."
                  (const "verbose"))
   :group 'lsp-ltex)
 
+;;
+;; (@* "Util" )
+;;
+
 (defun lsp-ltex--execute (cmd &rest args)
   "Return non-nil if CMD executed succesfully with ARGS."
   (save-window-excursion
     (let ((inhibit-message t) (message-log-max nil))
       (= 0 (shell-command (concat cmd " "
                                   (mapconcat #'shell-quote-argument args " ")))))))
+;;
+;; (@* "Installation and Upgrade" )
+;;
 
 (defun lsp-ltex--downloaded-extension-path ()
   "Return full path of the downloaded extension (compressed file).
@@ -251,6 +262,47 @@ This is use to unzip the language server files."
 
 This is use to active language server and check if language server's existence."
   (f-join lsp-ltex-server-store-path "latest"))
+
+(defun lsp-ltex--current-version ()
+  "Return the current version of LTEX."
+  (when-let* ((gz-files (ignore-errors
+                          (f--files lsp-ltex-server-store-path (equal (f-ext it) "gz"))))
+              (tar (nth 0 gz-files))
+              (fn (f-filename (s-replace ".tar.gz" "" tar))))
+    (s-replace "ltex-ls-" "" fn)))
+
+(defun lsp-ltex--latest-version ()
+  "Return the latest version from remote repository."
+  (github-tags lsp-ltex-repo-path)
+  (let ((index 0) version ver)
+    ;; Loop through tag name and fine the stable version
+    (while (and (not version) (< index (length github-tags-names)))
+      (setq ver (nth index github-tags-names)
+            index (1+ index))
+      (when (string-match-p "^[0-9.]+$" ver)  ; stable version are only with numbers and dot
+        (setq version ver)))
+    version))
+
+(defun lsp-ltex-upgrade-ls ()
+  "Upgrade LTEXT to latest stable version.
+
+If current server not found, install it then."
+  (interactive)
+  (let* ((latest (lsp-ltex--latest-version))
+         (current (lsp-ltex--current-version)))
+    (if (and current (version<= latest current))
+        (message "[INFO] Current LTEX server is up to date: %s" current)
+      (when current
+        ;; First delete all binary files
+        (delete-directory lsp-ltex-server-store-path t))
+      (setq-default lsp-ltex-version latest)
+      (lsp-install-server t 'ltex-ls)  ; this is async
+      (message "[INFO] %s LTEX server version: %s"
+               (if current "Upgrading" "Installing") lsp-ltex-version))))
+
+;;
+;; (@* "Activation" )
+;;
 
 (defun lsp-ltex--server-entry ()
   "Return the server entry file.
