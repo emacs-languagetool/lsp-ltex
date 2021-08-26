@@ -272,6 +272,14 @@ This is use to active language server and check if language server's existence."
         (setq version ver)))
     version))
 
+(defun lsp-ltex--lsp-dependency ()
+  "Register LSP dependency once."
+  (lsp-dependency
+   'ltex-ls
+   '(:system "ltex-ls")
+   `(:download :url ,lsp-ltex--server-download-url
+               :store-path ,(lsp-ltex--downloaded-extension-path))))
+
 (defcustom lsp-ltex-version (or (lsp-ltex--current-version)
                                 (lsp-ltex--latest-version))
   "Version of LTEX language server."
@@ -282,7 +290,8 @@ This is use to active language server and check if language server's existence."
                lsp-ltex--extension-name (format "%s.tar.gz" lsp-ltex--filename)
                lsp-ltex--server-download-url
                (format "https://github.com/%s/releases/download/%s/%s"
-                       lsp-ltex-repo-path value lsp-ltex--extension-name)))
+                       lsp-ltex-repo-path value lsp-ltex--extension-name))
+         (lsp-ltex--lsp-dependency))
   :group 'lsp-ltex)
 
 (defun lsp-ltex-upgrade-ls ()
@@ -346,11 +355,7 @@ This file is use to activate the language server."
    ("ltex.clearDiagnosticsWhenClosingFile" lsp-ltex-clear-diagnostics-when-closing-file)
    ("ltex.trace.server" lsp-ltex-trace-server)))
 
-(lsp-dependency
- 'ltex-ls
- '(:system "ltex-ls")
- `(:download :url ,lsp-ltex--server-download-url
-             :store-path ,(lsp-ltex--downloaded-extension-path)))
+(lsp-ltex--lsp-dependency)
 
 (lsp-register-client
  (make-lsp-client
