@@ -59,19 +59,6 @@ https://github.com/valentjn/ltex-ls"
 (defvar lsp-ltex--extension-name nil "File name of the extension file from language server.")
 (defvar lsp-ltex--server-download-url nil "Automatic download url for lsp-ltex.")
 
-(defcustom lsp-ltex-version (or (lsp-ltex--current-version)
-                                (lsp-ltex--latest-version))
-  "Version of LTEX language server."
-  :type 'string
-  :set (lambda (symbol value)
-         (set-default symbol value)
-         (setq lsp-ltex--filename (format "ltex-ls-%s" value)
-               lsp-ltex--extension-name (format "%s.tar.gz" lsp-ltex--filename)
-               lsp-ltex--server-download-url
-               (format "https://github.com/%s/releases/download/%s/%s"
-                       lsp-ltex-repo-path value lsp-ltex--extension-name)))
-  :group 'lsp-ltex)
-
 (defcustom lsp-ltex-server-store-path
   (f-join lsp-server-install-dir "ltex-ls")
   "The path to the file in which LTEX Language Server will be stored."
@@ -282,6 +269,19 @@ This is use to active language server and check if language server's existence."
       (when (string-match-p "^[0-9.]+$" ver)  ; stable version are only with numbers and dot
         (setq version ver)))
     version))
+
+(defcustom lsp-ltex-version (or (lsp-ltex--current-version)
+                                (lsp-ltex--latest-version))
+  "Version of LTEX language server."
+  :type 'string
+  :set (lambda (symbol value)
+         (set-default symbol value)
+         (setq lsp-ltex--filename (format "ltex-ls-%s" value)
+               lsp-ltex--extension-name (format "%s.tar.gz" lsp-ltex--filename)
+               lsp-ltex--server-download-url
+               (format "https://github.com/%s/releases/download/%s/%s"
+                       lsp-ltex-repo-path value lsp-ltex--extension-name)))
+  :group 'lsp-ltex)
 
 (defun lsp-ltex-upgrade-ls ()
   "Upgrade LTEXT to latest stable version.
