@@ -32,10 +32,12 @@
 
 ;;; Code:
 
+(require 'custom)
 (require 'subr-x)
 (require 'lsp-mode)
 (require 'f)
 (require 's)
+
 (require 'github-tags)
 
 (defgroup lsp-ltex nil
