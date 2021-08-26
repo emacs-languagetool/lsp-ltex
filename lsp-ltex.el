@@ -349,7 +349,7 @@ This file is use to activate the language server."
 (lsp-dependency
  'ltex-ls
  '(:system "ltex-ls")
- `(:download :url lsp-ltex--server-download-url
+ `(:download :url ,lsp-ltex--server-download-url
              :store-path ,(lsp-ltex--downloaded-extension-path)))
 
 (lsp-register-client
