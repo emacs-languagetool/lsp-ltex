@@ -227,6 +227,12 @@ This must be a positive integer."
   :group 'lsp-ltex)
 
 ;;
+;; (@* "Externals" )
+;;
+
+(defvar github-tags-names)
+
+;;
 ;; (@* "Util" )
 ;;
 
