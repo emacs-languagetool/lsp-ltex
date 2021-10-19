@@ -29,7 +29,7 @@ jobs:
 
             - uses: cask/setup-cask@master
               with:
-                  version: 1.1.0
+                  version: 'snapshot'
 
             - name: Setup cmake
               uses: jwlawson/actions-setup-cmake@v1.4
