@@ -7,7 +7,7 @@
 ;; Description: LSP Clients for LTEX.
 ;; Keyword: lsp languagetool checker
 ;; Version: 0.2.1
-;; Package-Requires: ((emacs "26.1") (lsp-mode "6.1") (f "0.20.0") (s "1.12.0"))
+;; Package-Requires: ((emacs "26.1") (lsp-mode "6.1") (f "0.20.0") (s "1.12.0") (github-tags "0.1.0"))
 ;; URL: https://github.com/emacs-languagetool/lsp-ltex
 
 ;; This file is NOT part of GNU Emacs.
@@ -38,7 +38,7 @@
 (require 'f)
 (require 's)
 
-(require 'github-tags)
+(require 'github-tags nil t)
 
 (defgroup lsp-ltex nil
   "Settings for the LTEX Language Server.
@@ -262,15 +262,16 @@ This is use to active language server and check if language server's existence."
 
 (defun lsp-ltex--latest-version ()
   "Return the latest version from remote repository."
-  (github-tags lsp-ltex-repo-path)
-  (let ((index 0) version ver)
-    ;; Loop through tag name and fine the stable version
-    (while (and (not version) (< index (length github-tags-names)))
-      (setq ver (nth index github-tags-names)
-            index (1+ index))
-      (when (string-match-p "^[0-9.]+$" ver)  ; stable version are only with numbers and dot
-        (setq version ver)))
-    version))
+  (when (featurep 'github-tags)
+    (github-tags lsp-ltex-repo-path)
+    (let ((index 0) version ver)
+      ;; Loop through tag name and fine the stable version
+      (while (and (not version) (< index (length github-tags-names)))
+        (setq ver (nth index github-tags-names)
+              index (1+ index))
+        (when (string-match-p "^[0-9.]+$" ver)  ; stable version are only with numbers and dot
+          (setq version ver)))
+      version)))
 
 (defun lsp-ltex--lsp-dependency ()
   "Register LSP dependency once."
@@ -281,7 +282,8 @@ This is use to active language server and check if language server's existence."
                :store-path ,(lsp-ltex--downloaded-extension-path))))
 
 (defcustom lsp-ltex-version (or (lsp-ltex--current-version)
-                                (lsp-ltex--latest-version))
+                                (lsp-ltex--latest-version)
+                                "14.0.0")  ; fall back to preset version
   "Version of LTEX language server."
   :type 'string
   :set (lambda (symbol value)
