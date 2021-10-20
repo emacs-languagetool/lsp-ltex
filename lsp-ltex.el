@@ -7,7 +7,7 @@
 ;; Description: LSP Clients for LTEX.
 ;; Keyword: lsp languagetool checker
 ;; Version: 0.2.1
-;; Package-Requires: ((emacs "26.1") (lsp-mode "6.1") (f "0.20.0") (s "1.12.0") (github-tags "0.1.0"))
+;; Package-Requires: ((emacs "26.1") (lsp-mode "6.1") (f "0.20.0") (s "1.12.0"))
 ;; URL: https://github.com/emacs-languagetool/lsp-ltex
 
 ;; This file is NOT part of GNU Emacs.
@@ -231,6 +231,8 @@ This must be a positive integer."
 ;;
 
 (defvar github-tags-names)
+
+(declare-function 'github-tags "ext:github-tags.el")
 
 ;;
 ;; (@* "Util" )
