@@ -232,7 +232,7 @@ This must be a positive integer."
 
 (defvar github-tags-names)
 
-(declare-function 'github-tags "ext:github-tags.el")
+(declare-function github-tags "ext:github-tags.el")
 
 ;;
 ;; (@* "Util" )
