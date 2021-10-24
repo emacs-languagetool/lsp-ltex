@@ -8,7 +8,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## 0.3.0 (Unreleased)
 > Released N/A
 
-* n/A
+* Allow latest version return `nil` value if fails.
 
 ## 0.2.0
 > Released Aug 26, 2021
