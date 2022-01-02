@@ -22,10 +22,17 @@
                        (lsp))))  ; or lsp-deferred
 ```
 
-For `lsp-ltex` to run you need to have `ltex-ls` installed and available. Go to https://valentjn.github.io/ltex/ltex-ls/installation.html,  download the appropriate version, uncompress, and place it under `~/.emacs.d/.cache/lsp/ltex-ls`. As explained there, if you download the archive that corresponds to your platform, no Java installation is needed. If you use the platform-independent file, you will need Java in your computer and you will need to set the JAVA_HOME environment variable.
+For `lsp-ltex` to run you need to have `ltex-ls` installed and available.
+Go to https://valentjn.github.io/ltex/ltex-ls/installation.html, download
+the appropriate version, uncompress, and place it under `~/.emacs.d/.cache/lsp/ltex-ls`
+. As explained there, if you download the archive that corresponds to
+your platform, no Java installation is needed. If you use the platform-independent
+file, you will need Java in your computer and you will need to set the JAVA_HOME
+environment variable.
 
-In the configuration for `lsp-ltex` you will probably want to set the version you want to use; for example `(setq lsp-ltex-version "15.2.0")` in the `init` section of `use-package`.
-
+In the configuration for `lsp-ltex` you will probably want to set the version
+you want to use; for example `(setq lsp-ltex-version "15.2.0")` in the `init`
+section of `use-package`.
 
 ## 📇 Commands
 
