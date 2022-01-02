@@ -12,7 +12,7 @@
 
 <p align="center"><img src="./etc/screenshot.png"/></p>
 
-## :floppy_disk: Quickstart
+## 💾 Quickstart
 
 ```el
 (use-package lsp-ltex
@@ -22,13 +22,13 @@
                        (lsp))))  ; or lsp-deferred
 ```
 
-## :card_index: Commands
+## 📇 Commands
 
 | Commands            | Description                                           |
 |:--------------------|:------------------------------------------------------|
 | lsp-ltex-upgrade-ls | Upgrade LTEX server, if not found install it instead. |
 
-## :wrench: Configuration
+## 🔧 Configuration
 
 `lsp-ltex` supports following configuration. Each configuration is described in
 detail in [LTEX Settings](https://valentjn.github.io/vscode-ltex/docs/settings.html).
