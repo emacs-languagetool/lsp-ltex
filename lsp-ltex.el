@@ -7,7 +7,7 @@
 ;; Description: LSP Clients for LTEX.
 ;; Keyword: lsp languagetool checker
 ;; Version: 0.2.1
-;; Package-Requires: ((emacs "26.1") (lsp-mode "6.1") (f "0.20.0") (s "1.12.0"))
+;; Package-Requires: ((emacs "26.1") (lsp-mode "6.1") (f "0.20.0"))
 ;; URL: https://github.com/emacs-languagetool/lsp-ltex
 
 ;; This file is NOT part of GNU Emacs.
@@ -36,7 +36,6 @@
 (require 'subr-x)
 (require 'lsp-mode)
 (require 'f)
-(require 's)
 
 (require 'github-tags nil t)
 
@@ -265,8 +264,8 @@ This is use to active language server and check if language server's existence."
   (when-let* ((gz-files (ignore-errors
                           (f--files lsp-ltex-server-store-path (equal (f-ext it) "gz"))))
               (tar (nth 0 gz-files))
-              (fn (f-filename (s-replace ".tar.gz" "" tar))))
-    (s-replace "ltex-ls-" "" fn)))
+              (fn (f-filename (replace-regexp-in-string (regexp-quote ".tar.gz") "" tar))))
+    (replace-regexp-in-string (regexp-quote "ltex-ls-") "" fn)))
 
 (defun lsp-ltex--latest-version ()
   "Return the latest version from remote repository."
