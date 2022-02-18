@@ -7,7 +7,7 @@
 ;; Description: LSP Clients for LTEX.
 ;; Keyword: lsp languagetool checker
 ;; Version: 0.2.1
-;; Package-Requires: ((emacs "26.1") (lsp-mode "6.1") (f "0.20.0"))
+;; Package-Requires: ((emacs "26.1") (lsp-mode "6.1"))
 ;; URL: https://github.com/emacs-languagetool/lsp-ltex
 
 ;; This file is NOT part of GNU Emacs.
@@ -35,7 +35,6 @@
 (require 'custom)
 (require 'subr-x)
 (require 'lsp-mode)
-(require 'f)
 
 (require 'github-tags nil t)
 
@@ -61,7 +60,7 @@ https://github.com/valentjn/ltex-ls"
 (defvar lsp-ltex--server-download-url nil "Automatic download url for lsp-ltex.")
 
 (defcustom lsp-ltex-server-store-path
-  (f-join lsp-server-install-dir "ltex-ls")
+  (expand-file-name "ltex-ls" lsp-server-install-dir)
   "The path to the file in which LTEX Language Server will be stored."
   :type 'file
   :group 'lsp-ltex)
@@ -251,20 +250,22 @@ This must be a positive integer."
   "Return full path of the downloaded extension (compressed file).
 
 This is use to unzip the language server files."
-  (f-join lsp-ltex-server-store-path lsp-ltex--extension-name))
+  (expand-file-name lsp-ltex--extension-name lsp-ltex-server-store-path))
 
 (defun lsp-ltex--extension-root ()
   "Return the root of the extension path.
 
 This is use to active language server and check if language server's existence."
-  (f-join lsp-ltex-server-store-path "latest"))
+  (expand-file-name "latest" lsp-ltex-server-store-path))
 
 (defun lsp-ltex--current-version ()
   "Return the current version of LTEX."
-  (when-let* ((gz-files (ignore-errors
-                          (f--files lsp-ltex-server-store-path (equal (f-ext it) "gz"))))
-              (tar (nth 0 gz-files))
-              (fn (f-filename (replace-regexp-in-string (regexp-quote ".tar.gz") "" tar))))
+  (when-let* ((gz-files (directory-files-recursively lsp-ltex-server-store-path
+                                                     "\\.gz"))
+              (tar (car gz-files))
+              (fn (file-name-nondirectory (replace-regexp-in-string (regexp-quote ".tar.gz")
+                                                                    ""
+                                                                    tar))))
     (replace-regexp-in-string (regexp-quote "ltex-ls-") "" fn)))
 
 (defun lsp-ltex--latest-version ()
@@ -327,9 +328,11 @@ If current server not found, install it then."
   "Return the server entry file.
 
 This file is use to activate the language server."
-  (f-join (lsp-ltex--extension-root) "bin" (if (eq system-type 'windows-nt)
-                                               "ltex-ls.bat"
-                                             "ltex-ls")))
+  (concat (file-name-as-directory (lsp-ltex--extension-root))
+          (file-name-as-directory "bin")
+          (if (eq system-type 'windows-nt)
+              "ltex-ls.bat"
+            "ltex-ls")))
 
 (defun lsp-ltex--server-command ()
   "Startup command for LTEX language server."
@@ -369,7 +372,7 @@ This file is use to activate the language server."
  (make-lsp-client
   :new-connection (lsp-stdio-connection
                    #'lsp-ltex--server-command
-                   (lambda () (f-exists? (lsp-ltex--extension-root))))
+                   (lambda () (file-exists-p (lsp-ltex--extension-root))))
   :activation-fn (lambda (&rest _) (apply #'derived-mode-p lsp-ltex-active-modes))
   :priority -2
   :add-on? t
@@ -380,9 +383,9 @@ This file is use to activate the language server."
      'ltex-ls
      (lambda ()
        (let* ((tar (lsp-ltex--downloaded-extension-path))
-              (dest (f-dirname tar))
-              (output (f-join dest lsp-ltex--filename))
-              (latest (f-join (f-dirname output) "latest")))
+              (dest (directory-file-name tar))
+              (output (expand-file-name lsp-ltex--filename dest))
+              (latest (expand-file-name (directory-file-name output) "latest")))
          (if (lsp-ltex--execute "tar" "-xvzf" tar "-C" dest)
              (unless (lsp-ltex--execute (if (eq system-type 'windows-nt) "move" "mv")
                                         output latest)
