@@ -307,7 +307,7 @@ This is use to active language server and check if language server's existence."
   :group 'lsp-ltex)
 
 (defun lsp-ltex-upgrade-ls ()
-  "Upgrade LTEXT to latest stable version.
+  "Upgrade LTEX to latest stable version.
 
 If current server not found, install it then."
   (interactive)
@@ -322,6 +322,18 @@ If current server not found, install it then."
       (lsp-install-server t 'ltex-ls)  ; this is async
       (message "[INFO] %s LTEX server version: %s"
                (if current "Upgrading" "Installing") lsp-ltex-version))))
+
+(defun lsp-ltex-install-ls ()
+  "Install LTEX language server."
+  (let* ((tar (lsp-ltex--downloaded-extension-path))
+         (dest (file-name-directory tar))
+         (output (expand-file-name lsp-ltex--filename dest))
+         (latest (expand-file-name "latest" (file-name-directory output))))
+    (if (lsp-ltex--execute "tar" "-xvzf" tar "-C" dest)
+        (unless (lsp-ltex--execute (if (eq system-type 'windows-nt) "move" "mv")
+                                   output latest)
+          (error "[ERROR] Failed to rename version `%s` to latest" lsp-ltex-version))
+      (error "[ERROR] Failed to unzip tar, %s" tar))))
 
 ;;
 ;; (@* "Activation" )
@@ -382,19 +394,7 @@ This file is use to activate the language server."
   :server-id 'ltex-ls
   :download-server-fn
   (lambda (_client _callback error-callback _update?)
-    (lsp-package-ensure
-     'ltex-ls
-     (lambda ()
-       (let* ((tar (lsp-ltex--downloaded-extension-path))
-              (dest (directory-file-name tar))
-              (output (expand-file-name lsp-ltex--filename dest))
-              (latest (expand-file-name (directory-file-name output) "latest")))
-         (if (lsp-ltex--execute "tar" "-xvzf" tar "-C" dest)
-             (unless (lsp-ltex--execute (if (eq system-type 'windows-nt) "move" "mv")
-                                        output latest)
-               (error "Failed to rename version `%s` to latest" lsp-ltex-version))
-           (error "Error during the unzip process: tar"))))
-     error-callback))))
+    (lsp-package-ensure 'ltex-ls #'lsp-ltex-install-ls error-callback))))
 
 (provide 'lsp-ltex)
 ;;; lsp-ltex.el ends here
