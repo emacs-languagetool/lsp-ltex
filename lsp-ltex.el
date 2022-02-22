@@ -236,12 +236,17 @@ This must be a positive integer."
 ;; (@* "Util" )
 ;;
 
+(defun lsp-ltex--s-replace (old new s)
+  "Replaces OLD with NEW in S."
+  (replace-regexp-in-string (regexp-quote old) new s t t))
+
 (defun lsp-ltex--execute (cmd &rest args)
   "Return non-nil if CMD executed succesfully with ARGS."
   (save-window-excursion
     (let ((inhibit-message t) (message-log-max nil))
       (= 0 (shell-command (concat cmd " "
                                   (mapconcat #'shell-quote-argument args " ")))))))
+
 ;;
 ;; (@* "Installation and Upgrade" )
 ;;
@@ -260,13 +265,11 @@ This is use to active language server and check if language server's existence."
 
 (defun lsp-ltex--current-version ()
   "Return the current version of LTEX."
-  (when-let* ((gz-files (directory-files-recursively lsp-ltex-server-store-path
-                                                     "\\.gz"))
-              (tar (car gz-files))
-              (fn (file-name-nondirectory (replace-regexp-in-string (regexp-quote ".tar.gz")
-                                                                    ""
-                                                                    tar))))
-    (replace-regexp-in-string (regexp-quote "ltex-ls-") "" fn)))
+  (when (file-directory-p lsp-ltex-server-store-path)
+    (when-let* ((gz-files (directory-files-recursively lsp-ltex-server-store-path "\\.gz"))
+                (tar (car gz-files))
+                (fn (file-name-nondirectory (lsp-ltex--s-replace ".tar.gz" "" tar))))
+      (lsp-ltex--s-replace "ltex-ls-" "" fn))))
 
 (defun lsp-ltex--latest-version ()
   "Return the latest version from remote repository."
