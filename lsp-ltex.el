@@ -1,6 +1,6 @@
 ;;; lsp-ltex.el --- LSP Clients for LTEX  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2021  Shen, Jen-Chieh
+;; Copyright (C) 2021-2022  Shen, Jen-Chieh
 ;; Created date 2021-04-03 00:35:56
 
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
