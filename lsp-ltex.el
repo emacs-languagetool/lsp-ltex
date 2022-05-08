@@ -245,7 +245,9 @@ This must be a positive integer."
   (save-window-excursion
     (let ((inhibit-message t) (message-log-max nil))
       (= 0 (shell-command (concat cmd " "
-                                  (mapconcat #'shell-quote-argument args " ")))))))
+                                  (mapconcat #'shell-quote-argument
+                                             (cl-remove-if #'null args)
+                                             " ")))))))
 
 ;;
 ;; (@* "Installation and Upgrade" )
@@ -331,6 +333,7 @@ If current server not found, install it then."
          (latest (expand-file-name "latest" (file-name-directory output))))
     (if (lsp-ltex--execute "tar" "-xvzf" tar "-C" dest)
         (unless (lsp-ltex--execute (if (eq system-type 'windows-nt) "move" "mv")
+                                   (unless (eq system-type 'windows-nt) "-f")
                                    output latest)
           (error "[ERROR] Failed to rename version `%s` to latest" lsp-ltex-version))
       (error "[ERROR] Failed to unzip tar, %s" tar))))

@@ -7,6 +7,7 @@
 # lsp-ltex
 
 [![CI](https://github.com/emacs-languagetool/lsp-ltex/actions/workflows/test.yml/badge.svg)](https://github.com/emacs-languagetool/lsp-ltex/actions/workflows/test.yml)
+[![Activate](https://github.com/emacs-languagetool/lsp-ltex/actions/workflows/activate.yml/badge.svg)](https://github.com/emacs-languagetool/lsp-ltex/actions/workflows/activate.yml)
 
 `lsp-mode` client leveraging [LTEX Language Server](https://github.com/valentjn/ltex-ls).
 
