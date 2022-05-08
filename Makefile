@@ -27,4 +27,5 @@ clean:
 	$(EASK) clean-all
 
 activate:
+	$(EASK) install
 	$(EASK) load ./test/activate.el

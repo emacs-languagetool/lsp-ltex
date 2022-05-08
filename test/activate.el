@@ -27,6 +27,8 @@
 
 (eask-pkg-init)
 
+(require 'lsp-mode)
+
 (lsp-install-server t 'ltex-ls)
 
 (unless (file-exists-p (lsp-ltex--extension-root))
