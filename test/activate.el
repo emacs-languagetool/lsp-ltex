@@ -45,4 +45,6 @@
   (error "Failed to install server: %s" (lsp-ltex--extension-root))
   (kill-emacs 1))
 
+(find-file "README.md")  ; start lsp
+
 ;;; activate.el ends here
