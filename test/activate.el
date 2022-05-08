@@ -36,13 +36,16 @@
 
 (defvar timer 0)
 
-(while (not (file-exists-p (lsp-ltex--extension-root)))
+(defconst server-install-path (lsp-ltex--extension-root)
+  "The server install location.")
+
+(while (not (file-exists-p server-install-path))
   (sit-for 5)
   (cl-incf timer 5)
   (message "Waited %s..." timer))
 
-(unless (file-exists-p (lsp-ltex--extension-root))
-  (error "Failed to install server: %s" (lsp-ltex--extension-root))
+(unless (file-exists-p server-install-path)
+  (error "Failed to install server: %s" server-install-path)
   (kill-emacs 1))
 
 (message "Testing with a file...")
