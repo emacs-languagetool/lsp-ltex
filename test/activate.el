@@ -31,8 +31,4 @@
 
 (lsp-install-server t 'ltex-ls)
 
-(unless (file-exists-p (lsp-ltex--extension-root))
-  (error "Failed to install server: %s" (lsp-ltex--extension-root))
-  (kill-emacs 1))
-
 ;;; activate.el ends here
