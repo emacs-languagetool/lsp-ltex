@@ -3,8 +3,6 @@ SHELL := /usr/bin/env bash
 EMACS ?= emacs
 EASK ?= eask
 
-TEST-FILES := $(shell ls test/lsp-ltex-*.el)
-
 .PHONY: clean checkdoc lint package install compile test
 
 ci: clean package install compile
@@ -26,4 +24,7 @@ test:
 	$(EASK) exec ert-runner -L . $(LOAD-TEST-FILES) -t '!no-win' -t '!org'
 
 clean:
-	rm -rf .eask *.elc
+	$(EASK) clean-all
+
+activate:
+	$(EASK) load ./test/activate.el
