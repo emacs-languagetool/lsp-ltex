@@ -21,11 +21,15 @@ compile:
 
 test:
 	@echo "Testing..."
-	$(EASK) exec ert-runner -L . $(LOAD-TEST-FILES) -t '!no-win' -t '!org'
+	$(EASK) ert ./test/*.el
+
+checkdoc:
+	@echo "Run checkdoc..."
+	$(EASK) checkdoc
+
+lint:
+	@echo "Run package-lint..."
+	$(EASK) lint
 
 clean:
 	$(EASK) clean-all
-
-activate:
-	$(EASK) install --dev
-	$(EASK) load ./test/activate.el
