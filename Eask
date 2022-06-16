@@ -2,6 +2,9 @@
          "0.2.1"
          "LSP Clients for LTEX")
 
+(website-url "https://github.com/emacs-languagetool/lsp-ltex")
+(keywords "lsp" "languagetool" "checker")
+
 (package-file "lsp-ltex.el")
 
 (source "gnu")

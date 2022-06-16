@@ -4,11 +4,10 @@
 ;; Created date 2021-04-03 00:35:56
 
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
-;; Description: LSP Clients for LTEX.
-;; Keyword: lsp languagetool checker
+;; URL: https://github.com/emacs-languagetool/lsp-ltex
 ;; Version: 0.2.1
 ;; Package-Requires: ((emacs "26.1") (lsp-mode "6.1"))
-;; URL: https://github.com/emacs-languagetool/lsp-ltex
+;; Keywords: lsp languagetool checker
 
 ;; This file is NOT part of GNU Emacs.
 
