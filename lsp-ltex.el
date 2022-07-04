@@ -7,7 +7,7 @@
 ;; URL: https://github.com/emacs-languagetool/lsp-ltex
 ;; Version: 0.2.1
 ;; Package-Requires: ((emacs "26.1") (lsp-mode "6.1"))
-;; Keywords: lsp languagetool checker
+;; Keywords: convenience lsp languagetool checker
 
 ;; This file is NOT part of GNU Emacs.
 
