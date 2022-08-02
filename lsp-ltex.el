@@ -352,11 +352,13 @@ If current server not found, install it then."
   "Return the server entry file.
 
 This file is use to activate the language server."
-  (concat (file-name-as-directory (lsp-ltex--extension-root))
-          (file-name-as-directory "bin")
-          (if (eq system-type 'windows-nt)
-              "ltex-ls.bat"
-            "ltex-ls")))
+  (if (lsp-ltex--store-locally-p)
+      (concat (file-name-as-directory (lsp-ltex--extension-root))
+              (file-name-as-directory "bin")
+              (if (eq system-type 'windows-nt)
+                  "ltex-ls.bat"
+                "ltex-ls"))
+    (executable-find "ltex-ls")))
 
 (defun lsp-ltex--server-command ()
   "Startup command for LTEX language server."
@@ -396,7 +398,7 @@ This file is use to activate the language server."
  (make-lsp-client
   :new-connection (lsp-stdio-connection
                    #'lsp-ltex--server-command
-                   (lambda () (file-exists-p (lsp-ltex--extension-root))))
+                   (lambda () (and (file-executable-p (lsp-ltex--server-entry)) (file-exists-p (lsp-ltex--server-entry)))))
   :activation-fn (lambda (&rest _) (apply #'derived-mode-p lsp-ltex-active-modes))
   :priority -2
   :add-on? t
