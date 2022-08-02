@@ -398,7 +398,10 @@ This file is use to activate the language server."
  (make-lsp-client
   :new-connection (lsp-stdio-connection
                    #'lsp-ltex--server-command
-                   (lambda () (and (file-executable-p (lsp-ltex--server-entry)) (file-exists-p (lsp-ltex--server-entry)))))
+                   (lambda () (let ((entry (lsp-ltex--server-entry)))
+                                (and (file-exists-p entry)
+                                     (not (file-directory-p entry))
+                                     (file-executable-p entry)))))
   :activation-fn (lambda (&rest _) (apply #'derived-mode-p lsp-ltex-active-modes))
   :priority -2
   :add-on? t
