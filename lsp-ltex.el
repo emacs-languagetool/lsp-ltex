@@ -276,7 +276,7 @@ This is use to active language server and check if language server's existence."
                   (tar (car gz-files))
                   (fn (file-name-nondirectory (lsp-ltex--s-replace ".tar.gz" "" tar))))
         (lsp-ltex--s-replace "ltex-ls-" "" fn))
-    (json-parse-string (shell-command-to-string "ltex-ls -V"))))
+    (gethash "ltex-ls" (json-parse-string (shell-command-to-string "ltex-ls -V")))))
 
 (defun lsp-ltex--latest-version ()
   "Return the latest version from remote repository."
