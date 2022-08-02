@@ -6,7 +6,7 @@
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; URL: https://github.com/emacs-languagetool/lsp-ltex
 ;; Version: 0.2.1
-;; Package-Requires: ((emacs "26.1") (lsp-mode "6.1"))
+;; Package-Requires: ((emacs "27.1") (lsp-mode "6.1"))
 ;; Keywords: convenience lsp languagetool checker
 
 ;; This file is NOT part of GNU Emacs.
@@ -264,13 +264,19 @@ This is use to unzip the language server files."
 This is use to active language server and check if language server's existence."
   (expand-file-name "latest" lsp-ltex-server-store-path))
 
+(defun lsp-ltex--store-locally-p ()
+  "Return non-nil if language server is installed locally."
+  (and (string-prefix-p lsp-server-install-dir lsp-ltex-server-store-path)
+       (file-directory-p lsp-ltex-server-store-path)))
+
 (defun lsp-ltex--current-version ()
   "Return the current version of LTEX."
-  (when (file-directory-p lsp-ltex-server-store-path)
-    (when-let* ((gz-files (directory-files-recursively lsp-ltex-server-store-path "\\.gz"))
-                (tar (car gz-files))
-                (fn (file-name-nondirectory (lsp-ltex--s-replace ".tar.gz" "" tar))))
-      (lsp-ltex--s-replace "ltex-ls-" "" fn))))
+  (if (lsp-ltex--store-locally-p)
+      (when-let* ((gz-files (directory-files-recursively lsp-ltex-server-store-path "\\.gz"))
+                  (tar (car gz-files))
+                  (fn (file-name-nondirectory (lsp-ltex--s-replace ".tar.gz" "" tar))))
+        (lsp-ltex--s-replace "ltex-ls-" "" fn))
+    (json-parse-string (shell-command-to-string "ltex-ls -V"))))
 
 (defun lsp-ltex--latest-version ()
   "Return the latest version from remote repository."
