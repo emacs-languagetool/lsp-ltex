@@ -296,7 +296,7 @@ This is use to active language server and check if language server's existence."
    'ltex-ls
    '(:system "ltex-ls")
    `(:download :url ,lsp-ltex--server-download-url
-               :store-path ,(lsp-ltex--downloaded-extension-path))))
+     :store-path ,(lsp-ltex--downloaded-extension-path))))
 
 (defcustom lsp-ltex-version (or (lsp-ltex--current-version)
                                 (lsp-ltex--latest-version)
