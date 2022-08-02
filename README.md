@@ -20,7 +20,9 @@
   :ensure t
   :hook (text-mode . (lambda ()
                        (require 'lsp-ltex)
-                       (lsp))))  ; or lsp-deferred
+                       (lsp)))  ; or lsp-deferred
+  :init
+  (setq lsp-ltex-version "15.2.0"))  ; make sure you have set this, see below
 ```
 
 For `lsp-ltex` to run you need to have `ltex-ls` installed and available.
