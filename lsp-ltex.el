@@ -64,6 +64,15 @@ https://github.com/valentjn/ltex-ls"
   :type 'file
   :group 'lsp-ltex)
 
+(defcustom lsp-ltex-user-rules-path
+  (let ((path (expand-file-name "lsp-ltex" user-emacs-directory)))
+    (unless (and (file-exists-p path) (file-directory-p path))
+      (mkdir path t))
+    path)
+  "The path to the directory where `lsp-ltex' will store user rules."
+  :type 'directory
+  :group 'lsp-ltex)
+
 (defcustom lsp-ltex-enabled nil
   "Controls whether the extension is enabled."
   :type '(choice (const :tag "None" nil)
