@@ -257,6 +257,31 @@ This must be a positive integer."
                                              (cl-remove-if #'null args)
                                              " ")))))))
 
+(defun lsp-ltex--serialize-symbol (sym dir)
+  "Serialize SYM to DIR.
+Return the written file name, or nil if SYM is not bound."
+  (when (boundp sym)
+    (let ((out-file (expand-file-name (format "%s.el" (symbol-name sym)) dir)))
+      (message "Saving `%s' to file \"%s\"" (symbol-name sym) out-file)
+      (with-temp-buffer
+        (prin1 (eval sym) (current-buffer))
+        (write-file out-file))
+      out-file)))
+
+(defun lsp-ltex--deserialize-symbol (sym dir &optional in-place)
+  "Deserialize SYM from DIR, if IN-PLACE is non-nil, set SYM to read data.
+Return the deserialized data."
+  (let ((in-file (expand-file-name (format "%s.el" (symbol-name sym)) dir))
+        (res nil))
+    (when (file-exists-p in-file)
+      (message "Loading `%s' from file \"%s\"" (symbol-name sym) in-file)
+      (with-temp-buffer
+        (insert-file-contents in-file)
+        (goto-char (point-min))
+        (ignore-errors (setq res (read (current-buffer)))))
+      (when in-place (set sym res)))
+    res))
+
 ;;
 ;; (@* "Installation and Upgrade" )
 ;;
