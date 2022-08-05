@@ -262,7 +262,7 @@ This must be a positive integer."
 Return the written file name, or nil if SYM is not bound."
   (when (boundp sym)
     (let ((out-file (expand-file-name (format "%s.el" (symbol-name sym)) dir)))
-      (message "Saving `%s' to file \"%s\"" (symbol-name sym) out-file)
+      (lsp-message "[INFO] Saving `%s' to file \"%s\"" (symbol-name sym) out-file)
       (with-temp-buffer
         (prin1 (eval sym) (current-buffer))
         (write-file out-file))
@@ -274,12 +274,34 @@ Return the deserialized data."
   (let ((in-file (expand-file-name (format "%s.el" (symbol-name sym)) dir))
         (res nil))
     (when (file-exists-p in-file)
-      (message "Loading `%s' from file \"%s\"" (symbol-name sym) in-file)
+      (lsp-message "[INFO] Loading `%s' from file \"%s\"" (symbol-name sym) in-file)
       (with-temp-buffer
         (insert-file-contents in-file)
         (goto-char (point-min))
         (ignore-errors (setq res (read (current-buffer)))))
       (when in-place (set sym res)))
+    res))
+
+(defun lsp-ltex--add-rule (lang word rules-plist)
+  "Add LANG:WORD to the plist named RULES-PLIST (symbol)."
+  (let* ((lang-key (intern (concat ":" lang))))
+    (when (null (eval rules-plist))
+      (set rules-plist (list lang-key [])))
+    (plist-put (eval rules-plist) lang-key
+               (vconcat (list word) (plist-get (eval rules-plist) lang-key)))
+    (when-let (out-file (lsp-ltex--serialize-symbol rules-plist lsp-ltex-user-rules-path))
+      (lsp-message "[INFO] Rule for language %s saved to file \"%s\"" lang out-file))))
+
+(defun lsp-ltex-combine-plists (&rest plists)
+  "Create a single property list from all plists in PLISTS.
+Modified from `org-combine-plists'. This combines the vector elements."
+  (let ((res (copy-sequence (pop plists)))
+        prop val plist)
+    (while plists
+      (setq plist (pop plists))
+      (while plist
+        (setq prop (pop plist) val (pop plist))
+        (setq res (plist-put res prop (vconcat val (plist-get res prop))))))
     res))
 
 ;;
