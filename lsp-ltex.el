@@ -404,6 +404,34 @@ If current server not found, install it then."
 ;; (@* "Activation" )
 ;;
 
+(defvar lsp-ltex--stored-dictionary
+  (lsp-ltex--deserialize-symbol 'lsp-ltex--stored-dictionary
+                                lsp-ltex-user-rules-path)
+  "Contains dictionary created from interactively added words.")
+
+(defvar lsp-ltex--stored-disabled-rules
+  (lsp-ltex--deserialize-symbol 'lsp-ltex--stored-disabled-rules
+                                lsp-ltex-user-rules-path)
+  "Contains rules created from interactively added words.")
+
+(defvar lsp-ltex--stored-hidden-false-positives
+  (lsp-ltex--deserialize-symbol 'lsp-ltex--stored-hidden-false-positives
+                                lsp-ltex-user-rules-path)
+  "Contains rules created from interactively added words.")
+
+(defvar lsp-ltex--dictionary
+  (lsp-ltex-combine-plists lsp-ltex-dictionary lsp-ltex--stored-dictionary)
+  "Contains combined `lsp-ltex-dictionary' and interactively added words.")
+
+(defvar lsp-ltex--disabled-rules
+  (lsp-ltex-combine-plists lsp-ltex-disabled-rules lsp-ltex--stored-disabled-rules)
+  "Contains combined `lsp-ltex-disabled-rules' and interactively added rules.")
+
+(defvar lsp-ltex--hidden-false-positives
+  (lsp-ltex-combine-plists lsp-ltex-hidden-false-positives
+                           lsp-ltex--stored-hidden-false-positives)
+  "Contains `lsp-ltex-hidden-false-positives' combined with user added rules.")
+
 (defun lsp-ltex--server-entry ()
   "Return the server entry file.
 
@@ -423,10 +451,10 @@ This file is use to activate the language server."
 (lsp-register-custom-settings
  '(("ltex.enabled" lsp-ltex-enabled)
    ("ltex.language" lsp-ltex-language)
-   ("ltex.dictionary" lsp-ltex-dictionary)
-   ("ltex.disabledRules" lsp-ltex-disabled-rules)
+   ("ltex.dictionary" lsp-ltex--dictionary)
+   ("ltex.disabledRules" lsp-ltex--disabled-rules)
+   ("ltex.hiddenFalsePositives" lsp-ltex--hidden-false-positives)
    ("ltex.enabledRules" lsp-ltex-enabled-rules)
-   ("ltex.hiddenFalsePositives" lsp-ltex-hidden-false-positives)
    ("ltex.bibtex.fields" lsp-ltex-bibtex-fields)
    ("ltex.latex.commands" lsp-ltex-latex-commands)
    ("ltex.latex.environments" lsp-ltex-latex-environments)
@@ -450,6 +478,57 @@ This file is use to activate the language server."
 
 (lsp-ltex--lsp-dependency)
 
+(defun lsp-ltex--action-add-to-rules (action-ht key rules-plist &optional store)
+  "Execute action ACTION-HT, getting KEY and storing it in the RULES-PLIST.
+When STORE is non-nil, this will also store the new plist to
+`lsp-ltex-user-rules-path'."
+  (let ((args-ht (gethash key action-ht)))
+    (dolist (lang (hash-table-keys args-ht))
+      (mapc (lambda (element)
+              (lsp-ltex--add-rule lang element rules-plist)
+              (when store
+                (lsp-ltex--serialize-symbol rules-plist lsp-ltex-user-rules-path)))
+            (gethash lang args-ht)))))
+
+(defvar lsp-ltex--disabled-rules
+  (lsp-ltex-combine-plists lsp-ltex-disabled-rules lsp-ltex--stored-disabled-rules)
+  "Contains combined `lsp-ltex-disabled-rules' and interactively added rules.")
+
+(defvar lsp-ltex--hidden-false-positives
+  (lsp-ltex-combine-plists lsp-ltex-hidden-false-positives
+                           lsp-ltex--stored-hidden-false-positives)
+  "Contains combined `lsp-ltex-hidden-false-positives' and interactively added rules.")
+
+(lsp-defun lsp-ltex--code-action-add-to-dictionary ((&Command :arguments?))
+  "Handle action for \"_ltex.addToDictionary\"."
+  ;; Add rule internally to `lsp-ltex--stored-dictionary' and
+  ;; store it to `lsp-ltex-user-rules-path'
+  (lsp-ltex--action-add-to-rules
+   (elt arguments? 0) "words" 'lsp-ltex--stored-dictionary t)
+  ;; Combine user configured words `lsp-ltex-dictionary' and the internal
+  ;; interactively generated `lsp-ltex--stored-dictionary'
+  (setq lsp-ltex--dictionary
+        (lsp-ltex-combine-plists lsp-ltex-dictionary lsp-ltex--stored-dictionary))
+  (lsp-message "Word added to dictionary."))
+
+(lsp-defun lsp-ltex--code-action-hide-false-positives ((&Command :arguments?))
+  "Handle action for \"_ltex.hideFalsePositives\"."
+  (lsp-ltex--action-add-to-rules (elt arguments? 0) "falsePositives"
+                                 'lsp-ltex--stored-hidden-false-positives t)
+  (setq lsp-ltex--hidden-false-positives
+        (lsp-ltex-combine-plists lsp-ltex-hidden-false-positives
+                                 lsp-ltex--stored-hidden-false-positives))
+  (lsp-message "Rule added to false positives."))
+
+(lsp-defun lsp-ltex--code-action-disable-rules ((&Command :arguments?))
+  "Handle action for \"_ltex.disableRules\"."
+  (lsp-ltex--action-add-to-rules (elt arguments? 0) "ruleIds"
+                                 'lsp-ltex--stored-disabled-rules t)
+  (setq lsp-ltex--disabled-rules
+        (lsp-ltex-combine-plists lsp-ltex-disabled-rules
+                                 lsp-ltex--stored-disabled-rules))
+  (lsp-message "Rule disabled."))
+
 (lsp-register-client
  (make-lsp-client
   :new-connection (lsp-stdio-connection
@@ -458,7 +537,13 @@ This file is use to activate the language server."
                                 (and (file-exists-p entry)
                                      (not (file-directory-p entry))
                                      (file-executable-p entry)))))
-  :activation-fn (lambda (&rest _) (apply #'derived-mode-p lsp-ltex-active-modes))
+  :activation-fn
+  (lambda (&rest _) (apply #'derived-mode-p lsp-ltex-active-modes))
+  :action-handlers
+  (lsp-ht
+   ("_ltex.addToDictionary" #'lsp-ltex--code-action-add-to-dictionary)
+   ("_ltex.disableRules" #'lsp-ltex--code-action-disable-rules)
+   ("_ltex.hideFalsePositives" #'lsp-ltex--code-action-hide-false-positives))
   :priority -2
   :add-on? t
   :server-id 'ltex-ls
