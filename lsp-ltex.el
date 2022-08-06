@@ -267,6 +267,13 @@ The editor need to send a completion request.")
 ;; (@* "Util" )
 ;;
 
+(defmacro lsp-ltex--mute-apply (&rest body)
+  "Execute BODY without message."
+  (declare (indent 0) (debug t))
+  `(let (message-log-max)
+     (with-temp-message (or (current-message) nil)
+       (let ((inhibit-message t)) ,@body))))
+
 (defun lsp-ltex--s-replace (old new s)
   "Replace OLD with NEW in S."
   (replace-regexp-in-string (regexp-quote old) new s t t))
@@ -274,7 +281,7 @@ The editor need to send a completion request.")
 (defun lsp-ltex--execute (cmd &rest args)
   "Return non-nil if CMD executed succesfully with ARGS."
   (save-window-excursion
-    (let ((inhibit-message t) (message-log-max nil))
+    (lsp-ltex--mute-apply
       (= 0 (shell-command (concat cmd " "
                                   (mapconcat #'shell-quote-argument
                                              (cl-remove-if #'null args)
@@ -291,7 +298,7 @@ Return the written file name, or nil if SYM is not bound."
       (lsp-message "[INFO] Saving `%s' to file \"%s\"" (symbol-name sym) out-file)
       (with-temp-buffer
         (prin1 (eval sym) (current-buffer))
-        (write-file out-file))
+        (lsp-ltex--mute-apply (write-file out-file)))
       out-file)))
 
 (defun lsp-ltex--deserialize-symbol (sym dir &optional mutate)
@@ -299,7 +306,7 @@ Return the written file name, or nil if SYM is not bound."
 Return the deserialized object, or nil if the SYM.el file dont exist."
   (let ((in-file (expand-file-name
                   (lsp-ltex--s-replace "lsp-ltex--" ""
-                         (symbol-name sym))
+                                       (symbol-name sym))
                   dir))
         res)
     (when (file-exists-p in-file)
@@ -382,7 +389,7 @@ This is use to active language server and check if language server's existence."
    'ltex-ls
    '(:system "ltex-ls")
    `(:download :url ,lsp-ltex--server-download-url
-     :store-path ,(lsp-ltex--downloaded-extension-path))))
+               :store-path ,(lsp-ltex--downloaded-extension-path))))
 
 (defcustom lsp-ltex-version (or (lsp-ltex--current-version)
                                 (lsp-ltex--latest-version)
