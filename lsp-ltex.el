@@ -465,7 +465,7 @@ This file is use to activate the language server."
    ("ltex.additionalRules.languageModel" lsp-ltex-additional-rules-language-model)
    ("ltex.additionalRules.neuralNetworkModel" lsp-ltex-additional-rules-neural-network-model)
    ("ltex.additionalRules.word2VecModel" lsp-ltex-additional-rules-word-2-vec-model)
-   ("ltex.ltex-ls.languageToolHttpServerUri" lsp-ltex-languagetool-http-server-uri)
+   ("ltex.languageToolHttpServerUri" lsp-ltex-languagetool-http-server-uri)
    ("ltex.ltex-ls.logLevel" lsp-ltex-log-level)
    ("ltex.java.path" lsp-ltex-java-path)
    ("ltex.java.initialHeapSize" lsp-ltex-java-initial-heap-size)
