@@ -48,35 +48,35 @@ section of `use-package`.
 `lsp-ltex` supports following configuration. Each configuration is described in
 detail in [LTEX Settings](https://valentjn.github.io/vscode-ltex/docs/settings.html).
 
-* `ltex.enabled` via `lsp-ltex-enabled`
-* `ltex.language` via `lsp-ltex-language`
-* `ltex.dictionary` via `lsp-ltex-dictionary`
-* `ltex.disabledRules` via `lsp-ltex-disabled-rules`
-* `ltex.enabledRules` via `lsp-ltex-enabled-rules`
-* `ltex.hiddenFalsePositives` via `lsp-ltex-hidden-false-positives`
-* `ltex.bibtex.fields` via `lsp-ltex-bibtex-fields`
-* `ltex.latex.commands` via `lsp-ltex-latex-commands`
-* `ltex.latex.environments` via `lsp-ltex-latex-environments`
-* `ltex.markdown-nodes` via `lsp-ltex-markdown-nodes`
-* `ltex.additionalRules.enablePickyRules` via `lsp-ltex-additional-rules-enable-picky-rules`
-* `ltex.additionalRules.motherTongue` via `lsp-ltex-mother-tongue`
-* `ltex.additionalRules.languageModel` via `lsp-ltex-additional-rules-language-model`
-* `ltex.additionalRules.neuralNetworkModel` via `lsp-ltex-additional-rules-neural-network-model`
-* `ltex.additionalRules.word2VecModel` via `lsp-ltex-additional-rules-word-2-vec-model`
-* `ltex.languageToolHttpServerUri` via `lsp-ltex-languagetool-http-server-uri`
-* `ltex.languageToolOrg.username` via `lsp-ltex-languagetool-org-username`
-* `ltex.languageToolOrg.apiKey` via `lsp-ltex-languagetool-org-api-key`
-* `ltex.ltex-ls.path` via `lsp-ltex-ls-path`
-* `ltex.ltex-ls.logLevel` via `lsp-ltex-log-level`
-* `ltex.java.path` via `lsp-ltex-java-path`
-* `ltex.java.initialHeapSize` via `lsp-ltex-java-initial-heap-size`
-* `ltex.java.maximumHeapSize` via `lsp-ltex-java-maximum-heap-size`
-* `ltex.sentenceCacheSize` via `lsp-ltex-sentence-cache-size`
-* `ltex.completionEnabled` via `lsp-ltex-completion-enabled` (currently, not implemented) 
-* `ltex.diagnosticSeverity` via `lsp-ltex-diagnostic-severity`
-* `ltex.checkFrequency` via `lsp-ltex-check-frequency`
-* `ltex.clearDiagnosticsWhenClosingFile` via `lsp-ltex-clear-diagnostics-when-closing-file`
-* `ltex.trace.server` via `lsp-ltex-trace-server`
+* [`ltex.enabled`](https://valentjn.github.io/ltex/settings.html#ltexenabled) via `lsp-ltex-enabled`
+* [`ltex.language`](https://valentjn.github.io/ltex/settings.html#ltexlanguage) via `lsp-ltex-language`
+* [`ltex.dictionary`](https://valentjn.github.io/ltex/settings.html#ltexdictionary) via `lsp-ltex-dictionary`
+* [`ltex.disabledRules`](https://valentjn.github.io/ltex/settings.html#ltexdisabledrules) via `lsp-ltex-disabled-rules`
+* [`ltex.enabledRules`](https://valentjn.github.io/ltex/settings.html#ltexenabledrules) via `lsp-ltex-enabled-rules`
+* [`ltex.hiddenFalsePositives`](https://valentjn.github.io/ltex/settings.html#ltexhiddenfalsepositives) via `lsp-ltex-hidden-false-positives`
+* [`ltex.bibtex.fields`](https://valentjn.github.io/ltex/settings.html#ltexbibtexfields) via `lsp-ltex-bibtex-fields`
+* [`ltex.latex.commands`](https://valentjn.github.io/ltex/settings.html#ltexlatexcommands) via `lsp-ltex-latex-commands`
+* [`ltex.latex.environments`](https://valentjn.github.io/ltex/settings.html#ltexlatexenvironments) via `lsp-ltex-latex-environments`
+* [`ltex.markdown.nodes`](https://valentjn.github.io/ltex/settings.html#ltexmarkdownnodes) via `lsp-ltex-markdown-nodes`
+* [`ltex.additionalRules.enablePickyRules`](https://valentjn.github.io/ltex/settings.html#ltexadditionalrulesenablepickyrules) via `lsp-ltex-additional-rules-enable-picky-rules`
+* [`ltex.additionalRules.motherTongue`](https://valentjn.github.io/ltex/settings.html#ltexadditionalrulesmothertongue) via `lsp-ltex-mother-tongue`
+* [`ltex.additionalRules.languageModel`](https://valentjn.github.io/ltex/settings.html#ltexadditionalruleslanguagemodel) via `lsp-ltex-additional-rules-language-model`
+* [`ltex.additionalRules.neuralNetworkModel`](https://valentjn.github.io/ltex/settings.html#ltexadditionalrulesneuralnetworkmodel) via `lsp-ltex-additional-rules-neural-network-model`
+* [`ltex.additionalRules.word2VecModel`](https://valentjn.github.io/ltex/settings.html#ltexadditionalrulesword2vecmodel) via `lsp-ltex-additional-rules-word-2-vec-model`
+* [`ltex.languageToolHttpServerUri`](https://valentjn.github.io/ltex/settings.html#ltexlanguagetoolhttpserveruri) via `lsp-ltex-languagetool-http-server-uri`
+* [`ltex.languageToolOrg.username`](https://valentjn.github.io/ltex/settings.html#ltexlanguagetoolorgusername) via `lsp-ltex-languagetool-org-username`
+* [`ltex.languageToolOrg.apiKey`](https://valentjn.github.io/ltex/settings.html#ltexlanguagetoolorgapikey) via `lsp-ltex-languagetool-org-api-key`
+* [`ltex.ltex-ls.path`](https://valentjn.github.io/ltex/settings.html#ltexltex-lspath) via `lsp-ltex-ls-path`
+* [`ltex.ltex-ls.logLevel`](https://valentjn.github.io/ltex/settings.html#ltexltex-lsloglevel) via `lsp-ltex-log-level`
+* [`ltex.java.path`](https://valentjn.github.io/ltex/settings.html#ltexjavapath) via `lsp-ltex-java-path`
+* [`ltex.java.initialHeapSize`](https://valentjn.github.io/ltex/settings.html#ltexjavainitialheapsize) via `lsp-ltex-java-initial-heap-size`
+* [`ltex.java.maximumHeapSize`](https://valentjn.github.io/ltex/settings.html#ltexjavamaximumheapsize) via `lsp-ltex-java-maximum-heap-size`
+* [`ltex.sentenceCacheSize`](https://valentjn.github.io/ltex/settings.html#ltexsentencecachesize) via `lsp-ltex-sentence-cache-size`
+* [`ltex.completionEnabled`](https://valentjn.github.io/ltex/settings.html#ltexcompletionenabled) via `lsp-ltex-completion-enabled` (currently, not implemented) 
+* [`ltex.diagnosticSeverity`](https://valentjn.github.io/ltex/settings.html#ltexdiagnosticseverity) via `lsp-ltex-diagnostic-severity`
+* [`ltex.checkFrequency`](https://valentjn.github.io/ltex/settings.html#ltexcheckfrequency) via `lsp-ltex-check-frequency`
+* [`ltex.clearDiagnosticsWhenClosingFile`](https://valentjn.github.io/ltex/settings.html#ltexcleardiagnosticswhenclosingfile) via `lsp-ltex-clear-diagnostics-when-closing-file`
+* [`ltex.trace.server`](https://valentjn.github.io/ltex/settings.html#ltextraceserver) via `lsp-ltex-trace-server`
 
 ## Contribute
 
