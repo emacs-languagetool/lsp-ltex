@@ -490,15 +490,6 @@ When STORE is non-nil, this will also store the new plist to
                 (lsp-ltex--serialize-symbol rules-plist lsp-ltex-user-rules-path)))
             (gethash lang args-ht)))))
 
-(defvar lsp-ltex--disabled-rules
-  (lsp-ltex-combine-plists lsp-ltex-disabled-rules lsp-ltex--stored-disabled-rules)
-  "Contains combined `lsp-ltex-disabled-rules' and interactively added rules.")
-
-(defvar lsp-ltex--hidden-false-positives
-  (lsp-ltex-combine-plists lsp-ltex-hidden-false-positives
-                           lsp-ltex--stored-hidden-false-positives)
-  "Contains combined `lsp-ltex-hidden-false-positives' and interactively added rules.")
-
 (lsp-defun lsp-ltex--code-action-add-to-dictionary ((&Command :arguments?))
   "Handle action for \"_ltex.addToDictionary\"."
   ;; Add rule internally to `lsp-ltex--stored-dictionary' and
