@@ -72,10 +72,11 @@ detail in [LTEX Settings](https://valentjn.github.io/vscode-ltex/docs/settings.h
 * [`ltex.java.initialHeapSize`](https://valentjn.github.io/ltex/settings.html#ltexjavainitialheapsize) via `lsp-ltex-java-initial-heap-size`
 * [`ltex.java.maximumHeapSize`](https://valentjn.github.io/ltex/settings.html#ltexjavamaximumheapsize) via `lsp-ltex-java-maximum-heap-size`
 * [`ltex.sentenceCacheSize`](https://valentjn.github.io/ltex/settings.html#ltexsentencecachesize) via `lsp-ltex-sentence-cache-size`
-* [`ltex.completionEnabled`](https://valentjn.github.io/ltex/settings.html#ltexcompletionenabled) via `lsp-ltex-completion-enabled` (currently, not implemented) 
+* [`ltex.completionEnabled`](https://valentjn.github.io/ltex/settings.html#ltexcompletionenabled) via `lsp-ltex-completion-enabled` (currently, not implemented)
 * [`ltex.diagnosticSeverity`](https://valentjn.github.io/ltex/settings.html#ltexdiagnosticseverity) via `lsp-ltex-diagnostic-severity`
 * [`ltex.checkFrequency`](https://valentjn.github.io/ltex/settings.html#ltexcheckfrequency) via `lsp-ltex-check-frequency`
 * [`ltex.clearDiagnosticsWhenClosingFile`](https://valentjn.github.io/ltex/settings.html#ltexcleardiagnosticswhenclosingfile) via `lsp-ltex-clear-diagnostics-when-closing-file`
+* [`ltex.statusBarItem`](https://valentjn.github.io/ltex/settings.html#ltexstatusbaritem) via `lsp-ltex-status-bar-item` (currently, not implemented)
 * [`ltex.trace.server`](https://valentjn.github.io/ltex/settings.html#ltextraceserver) via `lsp-ltex-trace-server`
 
 ## Contribute

@@ -243,6 +243,11 @@ The editor need to send a completion request.")
   :type 'boolean
   :group 'lsp-ltex)
 
+(defcustom lsp-ltex-status-bar-item nil ;; TODO: Add proper implementation
+  "If non-nil, the status of LTEX is shown permanently in the status bar."
+  :type 'boolean
+  :group 'lsp-ltex)
+
 (defcustom lsp-ltex-trace-server "off"
   "Debug setting to log the communication between language client and server."
   :type '(choice (const "off")
@@ -502,7 +507,7 @@ This file is use to activate the language server."
    ("ltex.diagnosticSeverity" lsp-ltex-diagnostic-severity)
    ("ltex.checkFrequency" lsp-ltex-check-frequency)
    ("ltex.clearDiagnosticsWhenClosingFile" lsp-ltex-clear-diagnostics-when-closing-file t)
-   ("ltex.statusBarItem" nil t) ;; TODO: Add implementation
+   ("ltex.statusBarItem" lsp-ltex-status-bar-item t)
    ("ltex.trace.server" lsp-ltex-trace-server)))
 
 (lsp-ltex--lsp-dependency)
