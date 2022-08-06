@@ -245,7 +245,7 @@ This must be a positive integer."
 ;;
 
 (defun lsp-ltex--s-replace (old new s)
-  "Replaces OLD with NEW in S."
+  "Replace OLD with NEW in S."
   (replace-regexp-in-string (regexp-quote old) new s t t))
 
 (defun lsp-ltex--execute (cmd &rest args)
@@ -268,9 +268,9 @@ Return the written file name, or nil if SYM is not bound."
         (write-file out-file))
       out-file)))
 
-  "Deserialize SYM from DIR, if IN-PLACE is non-nil, set SYM to read data.
-Return the deserialized data."
 (defun lsp-ltex--deserialize-symbol (sym dir &optional mutate)
+  "Deserialize SYM from DIR, if MUTATE is non-nil, assign the object to SYM.
+Return the deserialized object, or nil if the SYM.el file dont exist."
   (let ((in-file (expand-file-name (format "%s.el" (symbol-name sym)) dir))
         res)
     (when (file-exists-p in-file)
@@ -282,8 +282,8 @@ Return the deserialized data."
       (when mutate (set sym res)))
     res))
 
-  "Add LANG:WORD to the plist named RULES-PLIST (symbol)."
 (defun lsp-ltex--add-rule (lang rule rules-plist)
+  "Add RULE of language LANG to the plist named RULES-PLIST (symbol)."
   (let ((lang-key (intern (concat ":" lang))))
     (when (null (eval rules-plist))
       (set rules-plist (list lang-key [])))
@@ -294,7 +294,8 @@ Return the deserialized data."
 
 (defun lsp-ltex-combine-plists (&rest plists)
   "Create a single property list from all plists in PLISTS.
-Modified from `org-combine-plists'. This combines the vector elements."
+Modified from `org-combine-plists'. This supposes the values to be vectors,
+and concatenate them."
   (let ((res (copy-sequence (pop plists)))
         prop val plist)
     (while plists
@@ -407,30 +408,30 @@ If current server not found, install it then."
 (defvar lsp-ltex--stored-dictionary
   (lsp-ltex--deserialize-symbol 'lsp-ltex--stored-dictionary
                                 lsp-ltex-user-rules-path)
-  "Contains dictionary created from interactively added words.")
+  "The dictionary created from interactively added words.")
 
 (defvar lsp-ltex--stored-disabled-rules
   (lsp-ltex--deserialize-symbol 'lsp-ltex--stored-disabled-rules
                                 lsp-ltex-user-rules-path)
-  "Contains rules created from interactively added words.")
+  "The rules created from interactively added words.")
 
 (defvar lsp-ltex--stored-hidden-false-positives
   (lsp-ltex--deserialize-symbol 'lsp-ltex--stored-hidden-false-positives
                                 lsp-ltex-user-rules-path)
-  "Contains rules created from interactively added words.")
+  "The rules created from interactively added words.")
 
 (defvar lsp-ltex--combined-dictionary
   (lsp-ltex-combine-plists lsp-ltex-dictionary lsp-ltex--stored-dictionary)
-  "Contains combined `lsp-ltex-dictionary' and interactively added words.")
+  "The combined `lsp-ltex-dictionary' and interactively added words.")
 
 (defvar lsp-ltex--combined-disabled-rules
   (lsp-ltex-combine-plists lsp-ltex-disabled-rules lsp-ltex--stored-disabled-rules)
-  "Contains combined `lsp-ltex-disabled-rules' and interactively added rules.")
+  "The combined `lsp-ltex-disabled-rules' and interactively added rules.")
 
 (defvar lsp-ltex--combined-hidden-false-positives
   (lsp-ltex-combine-plists lsp-ltex-hidden-false-positives
                            lsp-ltex--stored-hidden-false-positives)
-  "Contains `lsp-ltex-hidden-false-positives' combined with user added rules.")
+  "The combined `lsp-ltex-hidden-false-positives' and interactively added rules.")
 
 (defun lsp-ltex--server-entry ()
   "Return the server entry file.
@@ -479,8 +480,8 @@ This file is use to activate the language server."
 (lsp-ltex--lsp-dependency)
 
 (defun lsp-ltex--action-add-to-rules (action-ht key rules-plist &optional store)
-  "Execute action ACTION-HT, getting KEY and storing it in the RULES-PLIST.
-When STORE is non-nil, this will also store the new plist to
+  "Execute action ACTION-HT by getting KEY and storing it in the RULES-PLIST.
+When STORE is non-nil, this will also store the new plist in the directory
 `lsp-ltex-user-rules-path'."
   (let ((args-ht (gethash key action-ht)))
     (dolist (lang (hash-table-keys args-ht))
@@ -492,12 +493,13 @@ When STORE is non-nil, this will also store the new plist to
 
 (lsp-defun lsp-ltex--code-action-add-to-dictionary ((&Command :arguments?))
   "Handle action for \"_ltex.addToDictionary\"."
-  ;; Add rule internally to `lsp-ltex--stored-dictionary' and
-  ;; store it to `lsp-ltex-user-rules-path'
+  ;; Add rule internally to the `lsp-ltex--stored-dictionary' plist and
+  ;; store it in the directory `lsp-ltex-user-rules-path'
   (lsp-ltex--action-add-to-rules
    (elt arguments? 0) "words" 'lsp-ltex--stored-dictionary t)
   ;; Combine user configured words `lsp-ltex-dictionary' and the internal
-  ;; interactively generated `lsp-ltex--stored-dictionary'
+  ;; interactively generated `lsp-ltex--stored-dictionary', and store them in
+  ;; the internal `lsp-ltex--combined-dictionary', which is sent to ltex-ls
   (setq lsp-ltex--combined-dictionary
         (lsp-ltex-combine-plists lsp-ltex-dictionary lsp-ltex--stored-dictionary))
   (lsp-message "[INFO] Word added to dictionary."))
