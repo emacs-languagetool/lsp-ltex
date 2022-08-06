@@ -483,7 +483,7 @@ This file is use to activate the language server."
    ("ltex.bibtex.fields" lsp-ltex-bibtex-fields)
    ("ltex.latex.commands" lsp-ltex-latex-commands)
    ("ltex.latex.environments" lsp-ltex-latex-environments)
-   ("ltex.markdown-nodes" lsp-ltex-markdown-nodes)
+   ("ltex.markdown.nodes" lsp-ltex-markdown-nodes)
    ("ltex.additionalRules.enablePickyRules" lsp-ltex-additional-rules-enable-picky-rules)
    ("ltex.additionalRules.motherTongue" lsp-ltex-mother-tongue)
    ("ltex.additionalRules.languageModel" lsp-ltex-additional-rules-language-model)
