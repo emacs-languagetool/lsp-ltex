@@ -473,7 +473,7 @@ This file is use to activate the language server."
    ("ltex.sentenceCacheSize" lsp-ltex-sentence-cache-size)
    ("ltex.diagnosticSeverity" lsp-ltex-diagnostic-severity)
    ("ltex.checkFrequency" lsp-ltex-check-frequency)
-   ("ltex.clearDiagnosticsWhenClosingFile" lsp-ltex-clear-diagnostics-when-closing-file)
+   ("ltex.clearDiagnosticsWhenClosingFile" lsp-ltex-clear-diagnostics-when-closing-file t)
    ("ltex.trace.server" lsp-ltex-trace-server)))
 
 (lsp-ltex--lsp-dependency)
