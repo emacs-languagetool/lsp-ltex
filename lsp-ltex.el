@@ -181,12 +181,6 @@ installation instead."
   :type 'string
   :group 'lsp-ltex)
 
-(defcustom lsp-ltex-java-force-try-system-wide nil
-  "If non-nil, always try to use a system-wide Java installation before
-trying to use an automatically downloaded Java distribution."
-  :type 'boolean
-  :group 'lsp-ltex)
-
 (defcustom lsp-ltex-java-initial-heap-size 64
   "Initial size of the Java heap memory in megabytes.
 Corresponds to Java's -Xmx option, this must be a positive integer"
@@ -474,7 +468,6 @@ This file is use to activate the language server."
    ("ltex.ltex-ls.languageToolHttpServerUri" lsp-ltex-languagetool-http-server-uri)
    ("ltex.ltex-ls.logLevel" lsp-ltex-log-level)
    ("ltex.java.path" lsp-ltex-java-path)
-   ("ltex.java.forceTrySystemWide" lsp-ltex-java-force-try-system-wide)
    ("ltex.java.initialHeapSize" lsp-ltex-java-initial-heap-size)
    ("ltex.java.maximumHeapSize" lsp-ltex-java-maximum-heap-size)
    ("ltex.sentenceCacheSize" lsp-ltex-sentence-cache-size)
