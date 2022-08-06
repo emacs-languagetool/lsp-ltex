@@ -419,15 +419,15 @@ If current server not found, install it then."
                                 lsp-ltex-user-rules-path)
   "Contains rules created from interactively added words.")
 
-(defvar lsp-ltex--dictionary
+(defvar lsp-ltex--combined-dictionary
   (lsp-ltex-combine-plists lsp-ltex-dictionary lsp-ltex--stored-dictionary)
   "Contains combined `lsp-ltex-dictionary' and interactively added words.")
 
-(defvar lsp-ltex--disabled-rules
+(defvar lsp-ltex--combined-disabled-rules
   (lsp-ltex-combine-plists lsp-ltex-disabled-rules lsp-ltex--stored-disabled-rules)
   "Contains combined `lsp-ltex-disabled-rules' and interactively added rules.")
 
-(defvar lsp-ltex--hidden-false-positives
+(defvar lsp-ltex--combined-hidden-false-positives
   (lsp-ltex-combine-plists lsp-ltex-hidden-false-positives
                            lsp-ltex--stored-hidden-false-positives)
   "Contains `lsp-ltex-hidden-false-positives' combined with user added rules.")
@@ -451,9 +451,9 @@ This file is use to activate the language server."
 (lsp-register-custom-settings
  '(("ltex.enabled" lsp-ltex-enabled)
    ("ltex.language" lsp-ltex-language)
-   ("ltex.dictionary" lsp-ltex--dictionary)
-   ("ltex.disabledRules" lsp-ltex--disabled-rules)
-   ("ltex.hiddenFalsePositives" lsp-ltex--hidden-false-positives)
+   ("ltex.dictionary" lsp-ltex--combined-dictionary)
+   ("ltex.disabledRules" lsp-ltex--combined-disabled-rules)
+   ("ltex.hiddenFalsePositives" lsp-ltex--combined-hidden-false-positives)
    ("ltex.enabledRules" lsp-ltex-enabled-rules)
    ("ltex.bibtex.fields" lsp-ltex-bibtex-fields)
    ("ltex.latex.commands" lsp-ltex-latex-commands)
@@ -507,7 +507,7 @@ When STORE is non-nil, this will also store the new plist to
    (elt arguments? 0) "words" 'lsp-ltex--stored-dictionary t)
   ;; Combine user configured words `lsp-ltex-dictionary' and the internal
   ;; interactively generated `lsp-ltex--stored-dictionary'
-  (setq lsp-ltex--dictionary
+  (setq lsp-ltex--combined-dictionary
         (lsp-ltex-combine-plists lsp-ltex-dictionary lsp-ltex--stored-dictionary))
   (lsp-message "Word added to dictionary."))
 
@@ -515,7 +515,7 @@ When STORE is non-nil, this will also store the new plist to
   "Handle action for \"_ltex.hideFalsePositives\"."
   (lsp-ltex--action-add-to-rules (elt arguments? 0) "falsePositives"
                                  'lsp-ltex--stored-hidden-false-positives t)
-  (setq lsp-ltex--hidden-false-positives
+  (setq lsp-ltex--combined-hidden-false-positives
         (lsp-ltex-combine-plists lsp-ltex-hidden-false-positives
                                  lsp-ltex--stored-hidden-false-positives))
   (lsp-message "Rule added to false positives."))
@@ -524,7 +524,7 @@ When STORE is non-nil, this will also store the new plist to
   "Handle action for \"_ltex.disableRules\"."
   (lsp-ltex--action-add-to-rules (elt arguments? 0) "ruleIds"
                                  'lsp-ltex--stored-disabled-rules t)
-  (setq lsp-ltex--disabled-rules
+  (setq lsp-ltex--combined-disabled-rules
         (lsp-ltex-combine-plists lsp-ltex-disabled-rules
                                  lsp-ltex--stored-disabled-rules))
   (lsp-message "Rule disabled."))
