@@ -63,13 +63,16 @@ detail in [LTEX Settings](https://valentjn.github.io/vscode-ltex/docs/settings.h
 * `ltex.additionalRules.languageModel` via `lsp-ltex-additional-rules-language-model`
 * `ltex.additionalRules.neuralNetworkModel` via `lsp-ltex-additional-rules-neural-network-model`
 * `ltex.additionalRules.word2VecModel` via `lsp-ltex-additional-rules-word-2-vec-model`
-* `ltex.ltex-ls.languageToolHttpServerUri` via `lsp-ltex-languagetool-http-server-uri`
+* `ltex.languageToolHttpServerUri` via `lsp-ltex-languagetool-http-server-uri`
+* `ltex.languageToolOrg.username` via `lsp-ltex-languagetool-org-username`
+* `ltex.languageToolOrg.apiKey` via `lsp-ltex-languagetool-org-api-key`
+* `ltex.ltex-ls.path` via `lsp-ltex-ls-path`
 * `ltex.ltex-ls.logLevel` via `lsp-ltex-log-level`
 * `ltex.java.path` via `lsp-ltex-java-path`
-* `ltex.java.forceTrySystemWide` via `lsp-ltex-java-force-try-system-wide`
 * `ltex.java.initialHeapSize` via `lsp-ltex-java-initial-heap-size`
 * `ltex.java.maximumHeapSize` via `lsp-ltex-java-maximum-heap-size`
 * `ltex.sentenceCacheSize` via `lsp-ltex-sentence-cache-size`
+* `ltex.completionEnabled` via `lsp-ltex-completion-enabled` (currently, not implemented) 
 * `ltex.diagnosticSeverity` via `lsp-ltex-diagnostic-severity`
 * `ltex.checkFrequency` via `lsp-ltex-check-frequency`
 * `ltex.clearDiagnosticsWhenClosingFile` via `lsp-ltex-clear-diagnostics-when-closing-file`
