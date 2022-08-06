@@ -161,6 +161,26 @@ external LanguageTool HTTP server."
   :type 'string
   :group 'lsp-ltex)
 
+(defcustom lsp-ltex-languagetool-org-username ""
+  "Username/email as used to log in at languagetool.org for Premium API access.
+Only relevant if `lsp-ltex-languagetool-http-server-uri' is set."
+  :type 'string
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-languagetool-org-api-key ""
+  "API key for Premium API access.
+Only relevant if `lsp-ltex-languagetool-http-server-uri' is set."
+  :type 'string
+  :group 'lsp-ltex)
+
+(defcustom lsp-ltex-ls-path ""
+  "If set to an empty string, LTEX automatically downloads ltex-ls from GitHub.
+It stores it in the folder of the extension, and uses it for the checking
+process.  You can point this setting to an ltex-ls release you downloaded by
+yourself."
+  :type 'directory
+  :group 'lsp-ltex)
+
 (defcustom lsp-ltex-log-level "fine"
   "Logging level (verbosity) of the ltex-ls server log."
   :type '(choice (const "severe")
@@ -198,6 +218,10 @@ Corresponds to Java's -Xmx option, this must be a positive integer"
 This must be a positive integer."
   :type 'integer
   :group 'lsp-ltex)
+
+(defcustom lsp-ltex-completion-enabled nil ;; TODO: Add proper implementation
+  "If this this is enabled, auto-completion list for the current word is sent.
+The editor need to send a completion request.")
 
 (defcustom lsp-ltex-diagnostic-severity "information"
   "Severity of the diagnostics corresponding to the grammar and spelling errors."
@@ -466,14 +490,19 @@ This file is use to activate the language server."
    ("ltex.additionalRules.neuralNetworkModel" lsp-ltex-additional-rules-neural-network-model)
    ("ltex.additionalRules.word2VecModel" lsp-ltex-additional-rules-word-2-vec-model)
    ("ltex.languageToolHttpServerUri" lsp-ltex-languagetool-http-server-uri)
+   ("ltex.languageToolOrg.username" lsp-ltex-languagetool-org-username)
+   ("ltex.languageToolOrg.apiKey" lsp-ltex-languagetool-org-api-key)
+   ("ltex.ltex-ls.path" lsp-ltex-ls-path)
    ("ltex.ltex-ls.logLevel" lsp-ltex-log-level)
    ("ltex.java.path" lsp-ltex-java-path)
    ("ltex.java.initialHeapSize" lsp-ltex-java-initial-heap-size)
    ("ltex.java.maximumHeapSize" lsp-ltex-java-maximum-heap-size)
    ("ltex.sentenceCacheSize" lsp-ltex-sentence-cache-size)
+   ("ltex.completionEnabled" lsp-ltex-completion-enabled t)
    ("ltex.diagnosticSeverity" lsp-ltex-diagnostic-severity)
    ("ltex.checkFrequency" lsp-ltex-check-frequency)
    ("ltex.clearDiagnosticsWhenClosingFile" lsp-ltex-clear-diagnostics-when-closing-file t)
+   ("ltex.statusBarItem" nil t) ;; TODO: Add implementation
    ("ltex.trace.server" lsp-ltex-trace-server)))
 
 (lsp-ltex--lsp-dependency)
