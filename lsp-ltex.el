@@ -261,7 +261,10 @@ This must be a positive integer."
   "Serialize SYM to DIR.
 Return the written file name, or nil if SYM is not bound."
   (when (boundp sym)
-    (let ((out-file (expand-file-name (format "%s.el" (symbol-name sym)) dir)))
+    (let ((out-file (expand-file-name
+                     (lsp-ltex--s-replace "lsp-ltex--" ""
+                                          (symbol-name sym))
+                     dir)))
       (lsp-message "[INFO] Saving `%s' to file \"%s\"" (symbol-name sym) out-file)
       (with-temp-buffer
         (prin1 (eval sym) (current-buffer))
@@ -271,7 +274,10 @@ Return the written file name, or nil if SYM is not bound."
 (defun lsp-ltex--deserialize-symbol (sym dir &optional mutate)
   "Deserialize SYM from DIR, if MUTATE is non-nil, assign the object to SYM.
 Return the deserialized object, or nil if the SYM.el file dont exist."
-  (let ((in-file (expand-file-name (format "%s.el" (symbol-name sym)) dir))
+  (let ((in-file (expand-file-name
+                  (lsp-ltex--s-replace "lsp-ltex--" ""
+                         (symbol-name sym))
+                  dir))
         res)
     (when (file-exists-p in-file)
       (lsp-message "[INFO] Loading `%s' from file \"%s\"" (symbol-name sym) in-file)
