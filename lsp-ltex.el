@@ -268,27 +268,27 @@ Return the written file name, or nil if SYM is not bound."
         (write-file out-file))
       out-file)))
 
-(defun lsp-ltex--deserialize-symbol (sym dir &optional in-place)
   "Deserialize SYM from DIR, if IN-PLACE is non-nil, set SYM to read data.
 Return the deserialized data."
+(defun lsp-ltex--deserialize-symbol (sym dir &optional mutate)
   (let ((in-file (expand-file-name (format "%s.el" (symbol-name sym)) dir))
-        (res nil))
+        res)
     (when (file-exists-p in-file)
       (lsp-message "[INFO] Loading `%s' from file \"%s\"" (symbol-name sym) in-file)
       (with-temp-buffer
         (insert-file-contents in-file)
         (goto-char (point-min))
         (ignore-errors (setq res (read (current-buffer)))))
-      (when in-place (set sym res)))
+      (when mutate (set sym res)))
     res))
 
-(defun lsp-ltex--add-rule (lang word rules-plist)
   "Add LANG:WORD to the plist named RULES-PLIST (symbol)."
-  (let* ((lang-key (intern (concat ":" lang))))
+(defun lsp-ltex--add-rule (lang rule rules-plist)
+  (let ((lang-key (intern (concat ":" lang))))
     (when (null (eval rules-plist))
       (set rules-plist (list lang-key [])))
     (plist-put (eval rules-plist) lang-key
-               (vconcat (list word) (plist-get (eval rules-plist) lang-key)))
+               (vconcat (list rule) (plist-get (eval rules-plist) lang-key)))
     (when-let (out-file (lsp-ltex--serialize-symbol rules-plist lsp-ltex-user-rules-path))
       (lsp-message "[INFO] Rule for language %s saved to file \"%s\"" lang out-file))))
 
@@ -484,8 +484,8 @@ When STORE is non-nil, this will also store the new plist to
 `lsp-ltex-user-rules-path'."
   (let ((args-ht (gethash key action-ht)))
     (dolist (lang (hash-table-keys args-ht))
-      (mapc (lambda (element)
-              (lsp-ltex--add-rule lang element rules-plist)
+      (mapc (lambda (rule)
+              (lsp-ltex--add-rule lang rule rules-plist)
               (when store
                 (lsp-ltex--serialize-symbol rules-plist lsp-ltex-user-rules-path)))
             (gethash lang args-ht)))))
@@ -500,7 +500,7 @@ When STORE is non-nil, this will also store the new plist to
   ;; interactively generated `lsp-ltex--stored-dictionary'
   (setq lsp-ltex--combined-dictionary
         (lsp-ltex-combine-plists lsp-ltex-dictionary lsp-ltex--stored-dictionary))
-  (lsp-message "Word added to dictionary."))
+  (lsp-message "[INFO] Word added to dictionary."))
 
 (lsp-defun lsp-ltex--code-action-hide-false-positives ((&Command :arguments?))
   "Handle action for \"_ltex.hideFalsePositives\"."
@@ -509,7 +509,7 @@ When STORE is non-nil, this will also store the new plist to
   (setq lsp-ltex--combined-hidden-false-positives
         (lsp-ltex-combine-plists lsp-ltex-hidden-false-positives
                                  lsp-ltex--stored-hidden-false-positives))
-  (lsp-message "Rule added to false positives."))
+  (lsp-message "[INFO] Rule added to false positives."))
 
 (lsp-defun lsp-ltex--code-action-disable-rules ((&Command :arguments?))
   "Handle action for \"_ltex.disableRules\"."
@@ -518,7 +518,7 @@ When STORE is non-nil, this will also store the new plist to
   (setq lsp-ltex--combined-disabled-rules
         (lsp-ltex-combine-plists lsp-ltex-disabled-rules
                                  lsp-ltex--stored-disabled-rules))
-  (lsp-message "Rule disabled."))
+  (lsp-message "[INFO] Rule disabled."))
 
 (lsp-register-client
  (make-lsp-client
