@@ -334,13 +334,12 @@ Return the deserialized object, or nil if the SYM.el file dont exist."
 
 (defun lsp-ltex--add-rule (lang rule rules-plist)
   "Add RULE of language LANG to the plist named RULES-PLIST (symbol)."
-  (let ((lang-key (intern (concat ":" lang))))
-    (when (null (eval rules-plist))
-      (set rules-plist (list lang-key [])))
-    (plist-put (eval rules-plist) lang-key
-               (vconcat (list rule) (plist-get (eval rules-plist) lang-key)))
-    (when-let (out-file (lsp-ltex--serialize-symbol rules-plist lsp-ltex-user-rules-path))
-      (lsp-message "[INFO] Rule for language %s saved to file \"%s\"" lang out-file))))
+  (when (null (eval rules-plist))
+    (set rules-plist (list lang [])))
+  (plist-put (eval rules-plist) lang
+             (vconcat (list rule) (plist-get (eval rules-plist) lang)))
+  (when-let (out-file (lsp-ltex--serialize-symbol rules-plist lsp-ltex-user-rules-path))
+    (lsp-message "[INFO] Rule for language %s saved to file \"%s\"" (symbol-name lang) out-file)))
 
 (defun lsp-ltex-combine-plists (&rest plists)
   "Create a single property list from all plists in PLISTS.
@@ -537,13 +536,14 @@ This file is use to activate the language server."
   "Execute action ACTION-HT by getting KEY and storing it in the RULES-PLIST.
 When STORE is non-nil, this will also store the new plist in the directory
 `lsp-ltex-user-rules-path'."
-  (let ((args-ht (lsp-get (if lsp-use-plists action-ht (elt action-ht 0)) key)))
+  (let ((args-ht (lsp-get (if (vectorp action-ht) (elt action-ht 0) action-ht) key)))
     (dolist (lang (lsp-ltex--lsp-keys args-ht))
-      (mapc (lambda (rule)
-              (lsp-ltex--add-rule lang rule rules-plist)
-              (when store
-                (lsp-ltex--serialize-symbol rules-plist lsp-ltex-user-rules-path)))
-            (lsp-get args-ht (intern (concat ":" lang)))))))
+      (let ((lang-key (if (stringp lang) (intern (concat ":" lang)) lang)))
+        (mapc (lambda (rule)
+                (lsp-ltex--add-rule lang-key rule rules-plist)
+                (when store
+                  (lsp-ltex--serialize-symbol rules-plist lsp-ltex-user-rules-path)))
+              (lsp-get args-ht lang-key))))))
 
 (lsp-defun lsp-ltex--code-action-add-to-dictionary ((&Command :arguments?))
   "Handle action for \"_ltex.addToDictionary\"."
