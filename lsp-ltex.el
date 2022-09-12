@@ -287,6 +287,20 @@ The editor need to send a completion request.")
                                              (cl-remove-if #'null args)
                                              " ")))))))
 
+(defun lsp-ltex--plist-keys (plist)
+  "Return the keys of PLIST."
+  (let (keys)
+    (while plist
+      (push (car plist) keys)
+      (setq plist (cddr plist)))
+    keys))
+
+(defun lsp-ltex--lsp-keys (table)
+  "Similar to `lsp-get' and `lsp-put', it return the keys in TABLE."
+  (if lsp-use-plists
+      (lsp-ltex--plist-keys table)
+    (hash-table-keys table)))
+
 (defun lsp-ltex--serialize-symbol (sym dir)
   "Serialize SYM to DIR.
 Return the written file name, or nil if SYM is not bound."
