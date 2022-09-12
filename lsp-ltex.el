@@ -537,20 +537,20 @@ This file is use to activate the language server."
   "Execute action ACTION-HT by getting KEY and storing it in the RULES-PLIST.
 When STORE is non-nil, this will also store the new plist in the directory
 `lsp-ltex-user-rules-path'."
-  (let ((args-ht (gethash key action-ht)))
-    (dolist (lang (hash-table-keys args-ht))
+  (let ((args-ht (lsp-get (if lsp-use-plists action-ht (elt action-ht 0)) key)))
+    (dolist (lang (lsp-ltex--lsp-keys args-ht))
       (mapc (lambda (rule)
               (lsp-ltex--add-rule lang rule rules-plist)
               (when store
                 (lsp-ltex--serialize-symbol rules-plist lsp-ltex-user-rules-path)))
-            (gethash lang args-ht)))))
+            (lsp-get args-ht (intern (concat ":" lang)))))))
 
 (lsp-defun lsp-ltex--code-action-add-to-dictionary ((&Command :arguments?))
   "Handle action for \"_ltex.addToDictionary\"."
   ;; Add rule internally to the `lsp-ltex--stored-dictionary' plist and
   ;; store it in the directory `lsp-ltex-user-rules-path'
   (lsp-ltex--action-add-to-rules
-   (elt arguments? 0) "words" 'lsp-ltex--stored-dictionary t)
+   arguments? :words 'lsp-ltex--stored-dictionary t)
   ;; Combine user configured words `lsp-ltex-dictionary' and the internal
   ;; interactively generated `lsp-ltex--stored-dictionary', and store them in
   ;; the internal `lsp-ltex--combined-dictionary', which is sent to ltex-ls
@@ -560,7 +560,7 @@ When STORE is non-nil, this will also store the new plist in the directory
 
 (lsp-defun lsp-ltex--code-action-hide-false-positives ((&Command :arguments?))
   "Handle action for \"_ltex.hideFalsePositives\"."
-  (lsp-ltex--action-add-to-rules (elt arguments? 0) "falsePositives"
+  (lsp-ltex--action-add-to-rules arguments? :falsePositives
                                  'lsp-ltex--stored-hidden-false-positives t)
   (setq lsp-ltex--combined-hidden-false-positives
         (lsp-ltex-combine-plists lsp-ltex-hidden-false-positives
@@ -569,7 +569,7 @@ When STORE is non-nil, this will also store the new plist in the directory
 
 (lsp-defun lsp-ltex--code-action-disable-rules ((&Command :arguments?))
   "Handle action for \"_ltex.disableRules\"."
-  (lsp-ltex--action-add-to-rules (elt arguments? 0) "ruleIds"
+  (lsp-ltex--action-add-to-rules arguments? :ruleIds
                                  'lsp-ltex--stored-disabled-rules t)
   (setq lsp-ltex--combined-disabled-rules
         (lsp-ltex-combine-plists lsp-ltex-disabled-rules
