@@ -376,6 +376,11 @@ and concatenate them."
         (message "An error occured while executing the command: %s"
                  (plist-get ret :errorMessage))))))
 
+;; https://valentjn.github.io/ltex/ltex-ls/server-usage.html#_ltexgetserverstatus-server
+(defun lsp-ltex-get-server-status ()
+  "Get the server status."
+  (lsp-send-execute-command "_ltex.getServerStatus"))
+
 ;;
 ;; (@* "Installation and Upgrade" )
 ;;
