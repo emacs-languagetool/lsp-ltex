@@ -355,6 +355,28 @@ and concatenate them."
     res))
 
 ;;
+;; (@* "LTeX Special Commands")
+;;
+
+;; https://valentjn.github.io/ltex/ltex-ls/server-usage.html#_ltexcheckdocument-server
+(defun lsp-ltex-check-document ()
+  "Trigger the check of the current buffer/region."
+  (interactive)
+  (when-let ((file (buffer-file-name)))
+    (let* ((uri (lsp--path-to-uri file))
+           (beg (region-beginning))
+           (end (region-end))
+           (req (if (region-active-p)
+                    `(:uri ,uri
+                      :range ,(lsp--region-to-range beg end))
+                  `(:uri ,uri)))
+           (ret (lsp-send-execute-command "_ltex.checkDocument" req)))
+      (if (and ret (plist-get ret :success))
+          (message "Command executed successfully.")
+        (message "An error occured while executing the command: %s"
+                 (plist-get ret :errorMessage))))))
+
+;;
 ;; (@* "Installation and Upgrade" )
 ;;
 
