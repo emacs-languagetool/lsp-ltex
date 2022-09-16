@@ -584,8 +584,7 @@ When STORE is non-nil, this will also store the new plist in the directory
                                 (and (file-exists-p entry)
                                      (not (file-directory-p entry))
                                      (file-executable-p entry)))))
-  :activation-fn
-  (lambda (&rest _) (apply #'derived-mode-p lsp-ltex-active-modes))
+  :major-modes lsp-ltex-active-modes
   :action-handlers
   (lsp-ht
    ("_ltex.addToDictionary" #'lsp-ltex--code-action-add-to-dictionary)
