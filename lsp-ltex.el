@@ -219,9 +219,11 @@ This must be a positive integer."
   :type 'integer
   :group 'lsp-ltex)
 
-(defcustom lsp-ltex-completion-enabled nil ;; TODO: Add proper implementation
+(defcustom lsp-ltex-completion-enabled nil  ; TODO: Add proper implementation
   "If this this is enabled, auto-completion list for the current word is sent.
-The editor need to send a completion request.")
+The editor need to send a completion request."
+  :type 'boolean
+  :group 'lsp-ltex)
 
 (defcustom lsp-ltex-diagnostic-severity "information"
   "Severity of the diagnostics corresponding to the grammar and spelling errors."
