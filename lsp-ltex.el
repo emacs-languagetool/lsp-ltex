@@ -393,9 +393,7 @@ This is use to active language server and check if language server's existence."
 
 (defun lsp-ltex--latest-version ()
   "Return the latest version from remote repository."
-  (message "1")
-  (let ((tags (ignore-errors (lsp-ltex--get-tags))) (index 0) version ver)
-    (message "2")
+  (let ((tags (lsp-ltex--get-tags)) (index 0) version ver)
     ;; Loop through tag name and fine the stable version
     (while (and (not version) (< index (length tags)))
       (setq ver (nth index tags)

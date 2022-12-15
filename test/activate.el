@@ -29,6 +29,12 @@
 
 (require 'lsp-mode)
 
+(message ":1")
+
+(require 'lsp-ltex)
+
+(message ":2 %s" lsp-ltex-version)
+
 (lsp-install-server t 'ltex-ls)  ; Start installation
 
 (defconst timeout 180
