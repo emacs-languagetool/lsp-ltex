@@ -33,8 +33,8 @@
 
 (require 'custom)
 (require 'subr-x)
-(require 'lsp-mode)
 
+(require 'lsp-mode)
 (require 'github-tags nil t)
 
 (defgroup lsp-ltex nil
