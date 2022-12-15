@@ -411,7 +411,7 @@ This is use to active language server and check if language server's existence."
                :store-path ,(lsp-ltex--downloaded-extension-path))))
 
 (defcustom lsp-ltex-version (or (lsp-ltex--current-version)
-                                (lsp-ltex--latest-version)
+                                ;;(lsp-ltex--latest-version)
                                 "14.0.0")  ; fall back to preset version
   "Version of LTEX language server."
   :type 'string
