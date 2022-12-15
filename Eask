@@ -16,6 +16,7 @@
 (depends-on "emacs" "26.1")
 (depends-on "lsp-mode")
 (depends-on "github-tags")
+(depends-on "ghub")
 
 (development
  (depends-on "markdown-mode"))

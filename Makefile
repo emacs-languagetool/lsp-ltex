@@ -34,4 +34,4 @@ clean:
 
 activate:
 	$(EASK) install --dev
-	$(EASK) load ./test/activate.el
+	$(EASK) load ./test/activate.el --allow-error
