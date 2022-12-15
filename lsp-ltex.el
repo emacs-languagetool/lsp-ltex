@@ -6,7 +6,7 @@
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; URL: https://github.com/emacs-languagetool/lsp-ltex
 ;; Version: 0.2.1
-;; Package-Requires: ((emacs "27.1") (lsp-mode "6.1"))
+;; Package-Requires: ((emacs "27.1") (lsp-mode "6.1") (ghub "2.0.0"))
 ;; Keywords: convenience lsp languagetool checker
 
 ;; This file is NOT part of GNU Emacs.
@@ -33,9 +33,9 @@
 
 (require 'custom)
 (require 'subr-x)
-(require 'lsp-mode)
 
-(require 'github-tags nil t)
+(require 'lsp-mode)
+(require 'ghub)
 
 (defgroup lsp-ltex nil
   "Settings for the LTEX Language Server.
@@ -256,14 +256,6 @@ The editor need to send a completion request.")
   :group 'lsp-ltex)
 
 ;;
-;; (@* "Externals" )
-;;
-
-(defvar github-tags-names)
-
-(declare-function github-tags "ext:github-tags.el")
-
-;;
 ;; (@* "Util" )
 ;;
 
@@ -384,17 +376,28 @@ This is use to active language server and check if language server's existence."
         (lsp-ltex--s-replace "ltex-ls-" "" fn))
     (ignore-errors (gethash "ltex-ls" (json-parse-string (shell-command-to-string "ltex-ls -V"))))))
 
+(defun lsp-ltex--get-tags ()
+  "Return a list of tags."
+  (let ((response (ghub-request "GET" (concat "/repos/" lsp-ltex-repo-path "/tags")
+                                nil
+                                :forge 'github
+                                :host "api.github.com"
+                                :auth 'basic))
+        names)
+    (dolist (data response)
+      (push (cdr (assoc 'name data)) names))
+    (reverse names)))
+
 (defun lsp-ltex--latest-version ()
   "Return the latest version from remote repository."
-  (when (and (featurep 'github-tags) (ignore-errors (github-tags lsp-ltex-repo-path)))
-    (let ((index 0) version ver)
-      ;; Loop through tag name and fine the stable version
-      (while (and (not version) (< index (length github-tags-names)))
-        (setq ver (nth index github-tags-names)
-              index (1+ index))
-        (when (string-match-p "^[0-9.]+$" ver)  ; stable version are only with numbers and dot
-          (setq version ver)))
-      version)))
+  (let ((tags (lsp-ltex--get-tags)) (index 0) version ver)
+    ;; Loop through tag name and fine the stable version
+    (while (and (not version) (< index (length tags)))
+      (setq ver (nth index tags)
+            index (1+ index))
+      (when (string-match-p "^[0-9.]+$" ver)  ; stable version are only with numbers and dot
+        (setq version ver)))
+    version))
 
 (defun lsp-ltex--lsp-dependency ()
   "Register LSP dependency once."
