@@ -393,8 +393,10 @@ This is use to active language server and check if language server's existence."
 
 (defun lsp-ltex--latest-version ()
   "Return the latest version from remote repository."
+  (message "1")
   (let ((tags (lsp-ltex--get-tags)) (index 0) version ver)
     ;; Loop through tag name and fine the stable version
+    (message "2")
     (while (and (not version) (< index (length tags)))
       (setq ver (nth index tags)
             index (1+ index))
@@ -411,7 +413,7 @@ This is use to active language server and check if language server's existence."
                :store-path ,(lsp-ltex--downloaded-extension-path))))
 
 (defcustom lsp-ltex-version (or (lsp-ltex--current-version)
-                                ;;(lsp-ltex--latest-version)
+                                (lsp-ltex--latest-version)
                                 "14.0.0")  ; fall back to preset version
   "Version of LTEX language server."
   :type 'string
