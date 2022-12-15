@@ -380,12 +380,14 @@ This is use to active language server and check if language server's existence."
 
 (defun lsp-ltex--get-tags ()
   "Return a list of tags."
-  (when-let ((response (ignore-errors
-                         (ghub-request "GET" (concat "/repos/" lsp-ltex-repo-path "/tags")
-                                       nil
-                                       :forge 'github
-                                       :host "api.github.com"
-                                       :auth 'basic))))
+  (when-let
+      ((response
+        (ghub-request "GET" (concat "/repos/" lsp-ltex-repo-path "/tags")
+                      nil
+                      :forge 'github
+                      :host "api.github.com"
+                      :auth 'basic
+                      :noerror t)))
     (let (names)
       (dolist (data response)
         (push (cdr (assoc 'name data)) names))
