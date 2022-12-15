@@ -221,7 +221,9 @@ This must be a positive integer."
 
 (defcustom lsp-ltex-completion-enabled nil ;; TODO: Add proper implementation
   "If this this is enabled, auto-completion list for the current word is sent.
-The editor need to send a completion request.")
+The editor need to send a completion request."
+  :type 'boolean
+  :group 'lsp-ltex)
 
 (defcustom lsp-ltex-diagnostic-severity "information"
   "Severity of the diagnostics corresponding to the grammar and spelling errors."
@@ -258,8 +260,6 @@ The editor need to send a completion request.")
 ;;
 ;; (@* "Externals" )
 ;;
-
-(defvar github-tags-names)
 
 (declare-function github-tags "ext:github-tags.el")
 
@@ -386,15 +386,17 @@ This is use to active language server and check if language server's existence."
 
 (defun lsp-ltex--latest-version ()
   "Return the latest version from remote repository."
-  (when (and (featurep 'github-tags) (ignore-errors (github-tags lsp-ltex-repo-path)))
-    (let ((index 0) version ver)
-      ;; Loop through tag name and fine the stable version
-      (while (and (not version) (< index (length github-tags-names)))
-        (setq ver (nth index github-tags-names)
-              index (1+ index))
-        (when (string-match-p "^[0-9.]+$" ver)  ; stable version are only with numbers and dot
-          (setq version ver)))
-      version)))
+  (when (featurep 'github-tags)
+    (when-let ((response (ignore-errors (github-tags lsp-ltex-repo-path))))
+      (let ((names (plist-get (cdr response) :names))
+            (index 0) version ver)
+        ;; Loop through tag name and fine the stable version
+        (while (and (not version) (< index (length names)))
+          (setq ver (nth index names)
+                index (1+ index))
+          (when (string-match-p "^[0-9.]+$" ver)  ; stable version are only with numbers and dot
+            (setq version ver)))
+        version))))
 
 (defun lsp-ltex--lsp-dependency ()
   "Register LSP dependency once."
