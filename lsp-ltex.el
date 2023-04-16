@@ -49,7 +49,10 @@ https://github.com/valentjn/ltex-ls"
   "Path points to the repository url.")
 
 (defcustom lsp-ltex-active-modes
-  '(text-mode latex-mode org-mode markdown-mode)
+  '( text-mode
+     bibtex-mode context-mode latex-mode
+     markdown-mode org-mode
+     rst-mode)
   "List of major mode that work with LTEX Language Server."
   :type 'list
   :group 'lsp-ltex)
