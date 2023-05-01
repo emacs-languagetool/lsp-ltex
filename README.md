@@ -5,6 +5,7 @@
 <img align="right" src="./etc/logo.png" with="115" height="55">
 
 # lsp-ltex
+> LSP Clients for LTEX
 
 [![CI](https://github.com/emacs-languagetool/lsp-ltex/actions/workflows/test.yml/badge.svg)](https://github.com/emacs-languagetool/lsp-ltex/actions/workflows/test.yml)
 [![Activate](https://github.com/emacs-languagetool/lsp-ltex/actions/workflows/activate.yml/badge.svg)](https://github.com/emacs-languagetool/lsp-ltex/actions/workflows/activate.yml)
