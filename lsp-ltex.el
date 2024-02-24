@@ -50,7 +50,8 @@ https://github.com/valentjn/ltex-ls"
 
 (defcustom lsp-ltex-active-modes
   '( text-mode
-     bibtex-mode context-mode latex-mode
+     bibtex-mode context-mode
+     latex-mode LaTeX mode ;; AUCTeX 14+ has renamed latex-mode to LaTeX-mode
      markdown-mode org-mode
      rst-mode)
   "List of major mode that work with LTEX Language Server."
