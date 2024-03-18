@@ -601,7 +601,10 @@ When STORE is non-nil, this will also store the new plist in the directory
   :server-id 'ltex-ls
   :download-server-fn
   (lambda (_client _callback error-callback _update?)
-    (lsp-package-ensure 'ltex-ls #'lsp-ltex-install-ls error-callback))))
+    (lsp-package-ensure 'ltex-ls (lambda (&rest _)
+                                   (lsp-ltex-install-ls)
+                                   (funcall callback))
+                        error-callback))))
 
 (provide 'lsp-ltex)
 ;;; lsp-ltex.el ends here
