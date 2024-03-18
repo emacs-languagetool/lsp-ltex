@@ -600,7 +600,7 @@ When STORE is non-nil, this will also store the new plist in the directory
   :add-on? t
   :server-id 'ltex-ls
   :download-server-fn
-  (lambda (_client _callback error-callback _update?)
+  (lambda (_client callback error-callback _update?)
     (lsp-package-ensure 'ltex-ls (lambda (&rest _)
                                    (lsp-ltex-install-ls)
                                    (funcall callback))
