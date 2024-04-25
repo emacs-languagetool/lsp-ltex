@@ -88,45 +88,45 @@ https://github.com/valentjn/ltex-ls"
   :type 'string
   :group 'lsp-ltex)
 
-(defcustom lsp-ltex-dictionary '()
+(defcustom lsp-ltex-dictionary nil
   "Lists of additional words that should not be counted as spelling errors."
   :type 'list
   :group 'lsp-ltex)
 
-(defcustom lsp-ltex-disabled-rules '()
+(defcustom lsp-ltex-disabled-rules nil
   "Lists of rules that should be disabled (if enabled by default by
 LanguageTool)."
   :type 'list
   :group 'lsp-ltex)
 
-(defcustom lsp-ltex-enabled-rules '()
+(defcustom lsp-ltex-enabled-rules nil
   "Lists of rules that should be enabled (if disabled by default by
 LanguageTool)."
   :type 'list
   :group 'lsp-ltex)
 
-(defcustom lsp-ltex-hidden-false-positives '()
+(defcustom lsp-ltex-hidden-false-positives nil
   "Lists of false-positive diagnostics to hide."
   :type 'list
   :group 'lsp-ltex)
 
-(defcustom lsp-ltex-bibtex-fields '()
+(defcustom lsp-ltex-bibtex-fields nil
   "List of BibTEX fields whose values are to be checked in BibTEX files."
   :type 'list
   :group 'lsp-ltex)
 
-(defcustom lsp-ltex-latex-commands '()
+(defcustom lsp-ltex-latex-commands nil
   "List of LATEX commands to be handled by the LATEX parser, listed together
 with empty arguments."
   :type 'list
   :group 'lsp-ltex)
 
-(defcustom lsp-ltex-latex-environments '()
+(defcustom lsp-ltex-latex-environments nil
   "List of names of LATEX environments to be handled by the LATEX parser."
   :type 'list
   :group 'lsp-ltex)
 
-(defcustom lsp-ltex-markdown-nodes '()
+(defcustom lsp-ltex-markdown-nodes nil
   "List of Markdown node types to be handled by the Markdown parser."
   :type 'list
   :group 'lsp-ltex)
