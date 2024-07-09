@@ -52,7 +52,8 @@ https://github.com/valentjn/ltex-ls"
   '( text-mode
      bibtex-mode context-mode
      latex-mode LaTeX-mode ;; AUCTeX 14+ has renamed latex-mode to LaTeX-mode
-     markdown-mode org-mode
+     markdown-mode gfm-mode
+     org-mode
      rst-mode)
   "List of major mode that work with LTEX Language Server."
   :type 'list
