@@ -51,12 +51,12 @@ https://github.com/valentjn/ltex-ls"
 (defcustom lsp-ltex-active-modes
   '( text-mode
      bibtex-mode context-mode
-     latex-mode LaTeX-mode ;; AUCTeX 14+ has renamed latex-mode to LaTeX-mode
+     latex-mode LaTeX-mode  ; AUCTeX 14+ has renamed latex-mode to LaTeX-mode
      markdown-mode gfm-mode
      org-mode
      rst-mode)
   "List of major mode that work with LTEX Language Server."
-  :type 'list
+  :type '(list symbol)
   :group 'lsp-ltex)
 
 (defvar lsp-ltex--filename nil "File base name.")
@@ -80,8 +80,9 @@ https://github.com/valentjn/ltex-ls"
 
 (defcustom lsp-ltex-enabled nil
   "Controls whether the extension is enabled."
-  :type '(choice (const :tag "None" nil)
-                 list)
+  :type '(choice (const :tag "false" nil)
+                 (const :tag "true" t)
+                 (vector string))
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-language "en-US"
@@ -91,45 +92,45 @@ https://github.com/valentjn/ltex-ls"
 
 (defcustom lsp-ltex-dictionary nil
   "Lists of additional words that should not be counted as spelling errors."
-  :type 'list
+  :type 'string
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-disabled-rules nil
   "Lists of rules that should be disabled (if enabled by default by
 LanguageTool)."
-  :type 'list
+  :type 'string
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-enabled-rules nil
   "Lists of rules that should be enabled (if disabled by default by
 LanguageTool)."
-  :type 'list
+  :type 'string
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-hidden-false-positives nil
   "Lists of false-positive diagnostics to hide."
-  :type 'list
+  :type 'string
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-bibtex-fields nil
   "List of BibTEX fields whose values are to be checked in BibTEX files."
-  :type 'list
+  :type 'string
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-latex-commands nil
   "List of LATEX commands to be handled by the LATEX parser, listed together
 with empty arguments."
-  :type 'list
+  :type 'string
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-latex-environments nil
   "List of names of LATEX environments to be handled by the LATEX parser."
-  :type 'list
+  :type 'string
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-markdown-nodes nil
   "List of Markdown node types to be handled by the Markdown parser."
-  :type 'list
+  :type 'string
   :group 'lsp-ltex)
 
 (defcustom lsp-ltex-additional-rules-enable-picky-rules nil
@@ -287,10 +288,10 @@ The editor need to send a completion request."
   "Return non-nil if CMD executed succesfully with ARGS."
   (save-window-excursion
     (lsp-ltex--mute-apply
-      (= 0 (shell-command (concat cmd " "
-                                  (mapconcat #'shell-quote-argument
-                                             (cl-remove-if #'null args)
-                                             " ")))))))
+     (= 0 (shell-command (concat cmd " "
+                                 (mapconcat #'shell-quote-argument
+                                            (cl-remove-if #'null args)
+                                            " ")))))))
 
 (defun lsp-ltex--plist-keys (plist)
   "Return the keys of PLIST."
@@ -343,7 +344,7 @@ Return the deserialized object, or nil if the SYM.el file dont exist."
     (set rules-plist (list lang [])))
   (plist-put (eval rules-plist) lang
              (vconcat (list rule) (plist-get (eval rules-plist) lang)))
-  (when-let (out-file (lsp-ltex--serialize-symbol rules-plist lsp-ltex-user-rules-path))
+  (when-let* ((out-file (lsp-ltex--serialize-symbol rules-plist lsp-ltex-user-rules-path)))
     (lsp-message "[INFO] Rule for language %s saved to file \"%s\"" (symbol-name lang) out-file)))
 
 (defun lsp-ltex-combine-plists (&rest plists)
@@ -392,7 +393,7 @@ This is use to active language server and check if language server's existence."
 (defun lsp-ltex--latest-version ()
   "Return the latest version from remote repository."
   (when (featurep 'github-tags)
-    (when-let ((response (ignore-errors (github-tags lsp-ltex-repo-path))))
+    (when-let* ((response (ignore-errors (github-tags lsp-ltex-repo-path))))
       (let ((names (plist-get (cdr response) :names))
             (index 0) version ver)
         ;; Loop through tag name and fine the stable version
