@@ -54,7 +54,8 @@ https://github.com/valentjn/ltex-ls"
      latex-mode LaTeX-mode  ; AUCTeX 14+ has renamed latex-mode to LaTeX-mode
      markdown-mode gfm-mode
      org-mode
-     rst-mode)
+     rst-mode
+     message-mode mu4e-compose-mode)
   "List of major mode that work with LTEX Language Server."
   :type '(list symbol)
   :group 'lsp-ltex)
