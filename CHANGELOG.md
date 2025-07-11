@@ -9,9 +9,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 > Released N/A
 
 * Allow latest version return `nil` value if fails.
-* Fix server installation on Unix system (#20)
-* Allow globally installed language server (#23)
-* Implement code actions for "Add to dictionary", "Disable rule" and "Hide false positive" (#26)
+* Fix server installation on Unix system ([`#20`](../../pull/20))
+* Allow globally installed language server ([`#23`](../../pull/23))
+* Implement code actions for "Add to dictionary", "Disable rule" and "Hide false positive" ([`#26`](../../pull/26))
 
 ## 0.2.0
 > Released Aug 26, 2021
